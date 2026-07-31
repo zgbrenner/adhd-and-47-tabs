@@ -18,7 +18,7 @@ make check
 gh skill publish --dry-run
 ```
 
-`make check` validates the source, rebuilds `dist/adhd-and-47-tabs.zip`, and runs the repository test suite. The ZIP is generated output and must not be edited manually.
+`make check` validates the source, rebuilds `dist/adhd-and-47-tabs.zip`, and runs the repository contract checks. The ZIP is generated output and must not be edited manually.
 
 ## Push source changes
 
@@ -56,7 +56,7 @@ Review the files, create a GitHub Release for `v<version>`, and upload the ZIP a
 ```bash
 python3 scripts/validate_skill.py
 python3 scripts/build_zip.py
-python3 -m unittest discover -s tests -v
+python3 scripts/test_repository.py
 python3 scripts/score_responses.py --responses responses.jsonl
 python3 scripts/prepare_release.py
 gh skill publish --dry-run
