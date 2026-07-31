@@ -1,4 +1,4 @@
-# ADHD & 47 Tabs
+# ADHD & 47 Tabs - a skill for AI
 
 <strong>An action-first skill for Claude, ChatGPT, Codex, and Copilot. For work, research, and life.</strong>
 
@@ -20,7 +20,7 @@
 
 Most AI answers are technically correct and operationally useless. They begin with a preamble, hide the actual answer in paragraph four, hand you eleven equally weighted options, and end with “hope this helps.”
 
-**I Have ADHD and 47 Tabs** changes the shape of the answer:
+**ADHD & 47 Tabs** changes the shape of the answer:
 
 1. The answer or next action comes first.
 2. Multi-step work becomes small numbered actions.
