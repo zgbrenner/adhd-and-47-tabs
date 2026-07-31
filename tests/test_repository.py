@@ -1,19 +1,22 @@
 from __future__ import annotations
 
+import json
 import re
 import struct
 import subprocess
 import sys
+import tempfile
 import unittest
 import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILL_NAME = "i-have-adhd-and-47-tabs"
+SKILL_NAME = "adhd-and-47-tabs"
 SKILL_DIR = ROOT / SKILL_NAME
 DIST_ZIP = ROOT / "dist" / f"{SKILL_NAME}.zip"
-ROOT_ZIP = ROOT / f"{SKILL_NAME}.zip"
 SOCIAL_PREVIEW = ROOT / "assets" / "social-preview.png"
+OLD_REPOSITORY = "zgbrenner/i-have-adhd-and-47-tabs"
+OLD_ASSET = "i-have-adhd-and-47-tabs.zip"
 
 
 class RepositoryContractTests(unittest.TestCase):
@@ -33,6 +36,9 @@ class RepositoryContractTests(unittest.TestCase):
             ROOT / "Makefile",
             ROOT / "docs" / "DIRECTORY_SUBMISSIONS.md",
             ROOT / "docs" / "DISCUSSION_SEEDS.md",
+            ROOT / "docs" / "EVALUATION.md",
+            ROOT / "evals" / "cases.json",
+            ROOT / "scripts" / "score_responses.py",
             ROOT / "scripts" / "publish_to_github.sh",
             ROOT / "scripts" / "create_release.sh",
             ROOT / "scripts" / "install_git_hooks.sh",
@@ -47,23 +53,30 @@ class RepositoryContractTests(unittest.TestCase):
             SOCIAL_PREVIEW,
             SKILL_DIR / "SKILL.md",
             SKILL_DIR / "README.md",
+            SKILL_DIR / "LICENSE",
+            SKILL_DIR / "NOTICE.md",
             SKILL_DIR / "references" / "examples.md",
         ]
         missing = [str(path.relative_to(ROOT)) for path in required if not path.is_file()]
         self.assertEqual(missing, [], f"Missing required files: {missing}")
+        self.assertFalse((ROOT / "i-have-adhd-and-47-tabs").exists())
         self.assertFalse((SKILL_DIR / "agents" / "openai.yaml").exists())
-        self.assertFalse(ROOT_ZIP.exists(), "Only the dist/ ZIP should be tracked")
+        self.assertFalse((ROOT / f"{SKILL_NAME}.zip").exists(), "Only dist/ may contain a ZIP")
 
     def test_no_hosted_ci_or_actions_configuration(self) -> None:
         workflows = ROOT / ".github" / "workflows"
-        workflow_files = list(workflows.glob("*.yml")) + list(workflows.glob("*.yaml")) if workflows.exists() else []
+        workflow_files = (
+            list(workflows.glob("*.yml")) + list(workflows.glob("*.yaml"))
+            if workflows.exists()
+            else []
+        )
         self.assertEqual(workflow_files, [], "Repository must not use GitHub Actions")
         self.assertFalse((ROOT / ".github" / "dependabot.yml").exists())
         self.assertFalse((ROOT / ".github" / "dependabot.yaml").exists())
 
     def test_versions_are_synchronized(self) -> None:
         version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
-        self.assertRegex(version, r"^\d+\.\d+\.\d+$")
+        self.assertEqual(version, "2.0.0")
         skill = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
         citation = (ROOT / "CITATION.cff").read_text(encoding="utf-8")
         changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
@@ -72,17 +85,61 @@ class RepositoryContractTests(unittest.TestCase):
         self.assertIn(f"## {version}", changelog)
         self.assertTrue((ROOT / "docs" / "releases" / f"{version}.md").is_file())
 
-    def test_skill_frontmatter_is_discoverable(self) -> None:
+    def test_skill_frontmatter_follows_agent_skills_contract(self) -> None:
         text = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
         self.assertTrue(text.startswith("---\n"))
         self.assertRegex(text, rf"(?m)^name: {re.escape(SKILL_NAME)}$")
         description = re.search(r"(?m)^description:\s*(.+)$", text)
         self.assertIsNotNone(description)
         assert description is not None
-        self.assertLessEqual(len(description.group(1)), 1024)
+        value = description.group(1).strip()
+        self.assertGreater(len(value), 20)
+        self.assertLessEqual(len(value), 1024)
+        self.assertTrue(value.startswith("Use when"))
+        self.assertRegex(SKILL_NAME, r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+        self.assertLessEqual(len(SKILL_NAME), 64)
+        compatibility = re.search(r"(?m)^compatibility:\s*(.+)$", text)
+        if compatibility:
+            self.assertLessEqual(len(compatibility.group(1).strip()), 500)
         self.assertIn("https://github.com/ayghri/i-have-adhd", text)
 
-    def test_readme_documents_local_only_validation(self) -> None:
+    def test_skill_optimizes_cognitive_load_without_forcing_brevity(self) -> None:
+        text = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8").lower()
+        for required in [
+            "cognitive load",
+            "not minimum word count",
+            "answer contract",
+            "action contract",
+            "artifact contract",
+            "project-update contract",
+            "do not force a next step",
+            "emotional support",
+            "high-stakes",
+            "creative",
+            "definition of done",
+        ]:
+            self.assertIn(required, text)
+
+    def test_primary_surfaces_use_canonical_identity(self) -> None:
+        paths = [
+            ROOT / "README.md",
+            ROOT / "PUBLISH.md",
+            ROOT / "CITATION.cff",
+            ROOT / "chatgpt-custom-gpt" / "INSTRUCTIONS.md",
+            ROOT / "scripts" / "validate_skill.py",
+            ROOT / "scripts" / "build_zip.py",
+            ROOT / "scripts" / "create_release.sh",
+            ROOT / "scripts" / "publish_to_github.sh",
+            SKILL_DIR / "SKILL.md",
+            SKILL_DIR / "README.md",
+        ]
+        for path in paths:
+            text = path.read_text(encoding="utf-8")
+            self.assertNotIn(OLD_REPOSITORY, text, str(path.relative_to(ROOT)))
+            self.assertNotIn(OLD_ASSET, text, str(path.relative_to(ROOT)))
+        self.assertIn("zgbrenner/adhd-and-47-tabs", (ROOT / "README.md").read_text(encoding="utf-8"))
+
+    def test_readme_documents_current_installation_and_validation_paths(self) -> None:
         text = (ROOT / "README.md").read_text(encoding="utf-8")
         for required in [
             "Claude",
@@ -90,10 +147,12 @@ class RepositoryContractTests(unittest.TestCase):
             "Codex",
             "GitHub Copilot",
             "gh skill install",
+            "gh skill publish --dry-run",
             "npx skills add",
             "make check",
             "make install-hooks",
             "no GitHub Actions or hosted CI",
+            "not a medical tool",
         ]:
             self.assertIn(required, text)
         self.assertNotIn("actions/workflows", text)
@@ -112,6 +171,104 @@ class RepositoryContractTests(unittest.TestCase):
         self.assertIn("Discussions", support)
         self.assertIn("medical", support.lower())
 
+    def test_evaluation_suite_covers_core_response_modes_and_exceptions(self) -> None:
+        cases = json.loads((ROOT / "evals" / "cases.json").read_text(encoding="utf-8"))
+        self.assertIsInstance(cases, list)
+        self.assertGreaterEqual(len(cases), 12)
+        ids = [case["id"] for case in cases]
+        self.assertEqual(len(ids), len(set(ids)))
+        categories = {case["category"] for case in cases}
+        self.assertTrue(
+            {
+                "answer",
+                "action",
+                "artifact",
+                "project-update",
+                "high-stakes",
+                "creative",
+                "emotional-support",
+                "troubleshooting",
+            }.issubset(categories)
+        )
+        for case in cases:
+            self.assertTrue(case["prompt"].strip())
+            self.assertIsInstance(case["expectations"], dict)
+
+    def test_response_scorer_accepts_good_output_and_rejects_bad_output(self) -> None:
+        cases = [
+            {
+                "id": "answer",
+                "category": "answer",
+                "prompt": "What is two plus two?",
+                "expectations": {
+                    "forbid_generic_opener": True,
+                    "forbid_next_step": True,
+                    "required_substrings": ["4"],
+                },
+            },
+            {
+                "id": "action",
+                "category": "action",
+                "prompt": "Help me start the form.",
+                "expectations": {
+                    "forbid_generic_opener": True,
+                    "require_next_step": True,
+                    "max_numbered_steps": 3,
+                },
+            },
+        ]
+        good = [
+            {"id": "answer", "response": "**4.**"},
+            {
+                "id": "action",
+                "response": "Open the form.\n\n1. Enter your name.\n2. Add the deadline.\n\nNext: open the form.",
+            },
+        ]
+        bad = [
+            {"id": "answer", "response": "Great question! The answer is 4. Next: ask another question."},
+            {"id": "action", "response": "There are several ways to approach this."},
+        ]
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            cases_path = directory / "cases.json"
+            good_path = directory / "good.jsonl"
+            bad_path = directory / "bad.jsonl"
+            cases_path.write_text(json.dumps(cases), encoding="utf-8")
+            good_path.write_text("\n".join(json.dumps(row) for row in good) + "\n", encoding="utf-8")
+            bad_path.write_text("\n".join(json.dumps(row) for row in bad) + "\n", encoding="utf-8")
+
+            good_result = subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "scripts" / "score_responses.py"),
+                    "--cases",
+                    str(cases_path),
+                    "--responses",
+                    str(good_path),
+                ],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(good_result.returncode, 0, good_result.stdout + good_result.stderr)
+            self.assertIn("2/2 cases passed", good_result.stdout)
+
+            bad_result = subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "scripts" / "score_responses.py"),
+                    "--cases",
+                    str(cases_path),
+                    "--responses",
+                    str(bad_path),
+                ],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+            )
+            self.assertNotEqual(bad_result.returncode, 0)
+            self.assertIn("0/2 cases passed", bad_result.stdout)
+
     def test_issue_and_discussion_forms_are_structured(self) -> None:
         bug = (ROOT / ".github" / "ISSUE_TEMPLATE" / "bug.yml").read_text(encoding="utf-8")
         discussion = (ROOT / ".github" / "DISCUSSION_TEMPLATE" / "q-a.yml").read_text(encoding="utf-8")
@@ -125,9 +282,10 @@ class RepositoryContractTests(unittest.TestCase):
         self.assertIn("hashlib.sha256", text)
         self.assertIn("gh release create", text)
         self.assertIn("gh release upload", text)
-        self.assertIn("dist/i-have-adhd-and-47-tabs.zip", text)
+        self.assertIn("dist/adhd-and-47-tabs.zip", text)
         self.assertIn("dist/SHA256SUMS", text)
         self.assertIn('CURRENT_BRANCH="$(git branch --show-current)"', text)
+        self.assertIn('REPO="zgbrenner/adhd-and-47-tabs"', text)
 
     def test_local_hook_runs_repository_checks(self) -> None:
         hook = (ROOT / ".githooks" / "pre-push").read_text(encoding="utf-8")
