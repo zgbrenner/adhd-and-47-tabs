@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-title: "I Have ADHD and 47 Tabs"
+title: "ADHD & 47 Tabs"
 message: "Please credit both the original skill author and the adaptation author."
 type: software
 authors:
@@ -7,7 +7,7 @@ authors:
     given-names: Ayoub
   - family-names: Brenner
     given-names: Zachary
-version: 1.1.0
-date-released: 2026-07-22
+version: 2.0.0
+date-released: 2026-07-31
 license: MIT
-repository-code: "https://github.com/zgbrenner/i-have-adhd-and-47-tabs"
+repository-code: "https://github.com/zgbrenner/adhd-and-47-tabs"

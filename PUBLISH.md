@@ -1,54 +1,63 @@
 # Publishing
 
-This repository intentionally uses no GitHub Actions or hosted CI. Validation, packaging, pushes, and releases run from a maintainer's computer.
+This repository intentionally uses no GitHub Actions or hosted CI. Validation, packaging, and release preparation run locally.
 
 ## One-time setup
 
-Install Python 3, Git, and GitHub CLI, then authenticate:
+Install Python 3, Git, Make, and GitHub CLI, then authenticate:
 
 ```bash
 gh auth login
 make install-hooks
 ```
 
-The optional Git hook runs `make check` before each push on that computer.
-
-## Publish repository changes
+## Validate a change
 
 ```bash
-./scripts/publish_to_github.sh
+make check
+gh skill publish --dry-run
 ```
 
-The script validates the skill, rebuilds the distributable ZIP, runs tests, commits resulting changes, verifies the `origin` repository, and pushes the current branch.
+`make check` validates the source, rebuilds `dist/adhd-and-47-tabs.zip`, and runs the repository contract checks. The ZIP is generated output and must not be edited manually.
 
-## Publish a release
+## Push source changes
 
-1. Update `VERSION`, `i-have-adhd-and-47-tabs/SKILL.md`, `CITATION.cff`, `CHANGELOG.md`, and `docs/releases/<version>.md`.
-2. Run `make check`.
-3. Commit and push the changes to `main`.
-4. Run:
+After the checks pass, use your normal reviewed Git workflow:
+
+```bash
+git add --all
+git commit -m "describe the change"
+git push
+```
+
+The repository does not include a script that commits, tags, or pushes automatically. That prevents a stale repository constant from publishing to the wrong destination.
+
+## Prepare a release
+
+1. Update `VERSION`, `adhd-and-47-tabs/SKILL.md`, `CITATION.cff`, `CHANGELOG.md`, and `docs/releases/<version>.md`.
+2. Run `make check` and `gh skill publish --dry-run`.
+3. Commit and merge the tracked changes to `main`.
+4. From a clean checkout of `main`, run:
 
 ```bash
 make release
 ```
 
-The local release script:
+This creates:
 
-- validates the version and release notes;
-- runs the complete repository test suite;
-- confirms the committed ZIP is current;
-- generates `dist/SHA256SUMS` locally;
-- verifies local `main` matches `origin/main`;
-- creates and pushes the annotated version tag when needed;
-- creates or updates the GitHub Release and its two assets.
+- `dist/adhd-and-47-tabs.zip`;
+- `dist/SHA256SUMS`;
+- a reference to the matching release-notes file.
 
-It uses the GitHub API through the authenticated `gh` command and does not start a GitHub Actions job.
+Review the files, create a GitHub Release for `v<version>`, and upload the ZIP and checksum file. Release publishing stays an explicit maintainer action.
 
-## Manual validation
+## Manual commands
 
 ```bash
 python3 scripts/validate_skill.py
 python3 scripts/build_zip.py
-python3 -m unittest discover -s tests -v
-git diff --exit-code -- dist/i-have-adhd-and-47-tabs.zip
+python3 scripts/test_repository.py
+python3 scripts/score_responses.py --responses responses.jsonl
+python3 scripts/prepare_release.py
+gh skill publish --dry-run
 ```

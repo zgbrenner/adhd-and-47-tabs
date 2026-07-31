@@ -2,35 +2,27 @@
 
 Use the canonical skill URL when a directory accepts a deep link:
 
-`https://github.com/zgbrenner/i-have-adhd-and-47-tabs/tree/main/i-have-adhd-and-47-tabs`
+`https://github.com/zgbrenner/adhd-and-47-tabs/tree/main/adhd-and-47-tabs`
 
 ## Listing copy
 
-**Name:** I Have ADHD and 47 Tabs
+**Name:** ADHD & 47 Tabs
 
-**Short description:** ADHD-friendly Agent Skill that puts the answer first, limits options, preserves multi-turn context, and ends unfinished work with one clear next step.
+**Short description:** Cross-platform Agent Skill that lowers cognitive load by putting answers and finished outputs first, limiting the active working set, preserving project state, and avoiding unnecessary next steps.
 
-**Category:** Productivity
+**Category:** Productivity and accessibility
 
-**Tags:** ADHD, productivity, accessibility, executive function, neurodivergent, writing, research, planning, ChatGPT, Claude, Codex, GitHub Copilot
+**Tags:** ADHD, productivity, accessibility, executive function, focus, writing, research, planning, ChatGPT, Claude, Codex, GitHub Copilot
 
 **License:** MIT
 
 **Platforms:** Claude, ChatGPT, Codex, GitHub Copilot, and Agent Skills compatible systems
 
-## Submission targets
-
-- Awesome Skills Directory: https://www.awesomeskills.dev/en/submit
-- AgentSkill.sh: https://agentskill.sh/submit
-- AgenticSkills: https://agenticskills.io/submit
-- Skills Directory: https://www.skillsdirectory.com/submit
-
-The Claude Skills Directory submission link was returning a GitHub 404 when this kit was prepared, so it should be retried later rather than submitted to an unverified endpoint.
-
 ## Verification checklist
 
-- Submit the public repository or canonical skill URL.
-- Claim the listing with the same GitHub account when supported.
+- Submit the canonical repository or skill URL.
 - Link the latest GitHub Release as the download.
-- Confirm the listing displays the upstream attribution and MIT license.
-- Re-submit or enable repository sync after each release.
+- Confirm the listing uses `adhd-and-47-tabs.zip` and not the retired v1 package name.
+- Confirm the listing displays upstream attribution and the MIT license.
+- Re-submit or refresh the listing after each release.
+- Test every directory URL immediately before submission because directory forms and requirements change.
