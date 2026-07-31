@@ -4,7 +4,7 @@ This repository intentionally uses no GitHub Actions or hosted CI. Validation, p
 
 ## One-time setup
 
-Install Python 3, Git, and GitHub CLI, then authenticate:
+Install Python 3, Git, Make, and GitHub CLI, then authenticate:
 
 ```bash
 gh auth login
@@ -13,42 +13,50 @@ make install-hooks
 
 The optional Git hook runs `make check` before each push on that computer.
 
+## Validate a change
+
+```bash
+make check
+gh skill publish --dry-run
+```
+
+`make check` validates the source, rebuilds `dist/adhd-and-47-tabs.zip`, and runs the repository test suite. The ZIP is generated output and must not be edited manually.
+
 ## Publish repository changes
 
 ```bash
 ./scripts/publish_to_github.sh
 ```
 
-The script validates the skill, rebuilds the distributable ZIP, runs tests, commits resulting changes, verifies the `origin` repository, and pushes the current branch.
+The script validates the skill, rebuilds the distributable ZIP, runs tests, commits tracked source changes, verifies the `origin` repository, and pushes the current branch.
 
 ## Publish a release
 
-1. Update `VERSION`, `i-have-adhd-and-47-tabs/SKILL.md`, `CITATION.cff`, `CHANGELOG.md`, and `docs/releases/<version>.md`.
-2. Run `make check`.
-3. Commit and push the changes to `main`.
+1. Update `VERSION`, `adhd-and-47-tabs/SKILL.md`, `CITATION.cff`, `CHANGELOG.md`, and `docs/releases/<version>.md`.
+2. Run `make check` and `gh skill publish --dry-run`.
+3. Commit and push the tracked changes to `main`.
 4. Run:
 
 ```bash
 make release
 ```
 
-The local release script:
+The local release process:
 
-- validates the version and release notes;
+- validates version and release notes;
 - runs the complete repository test suite;
-- confirms the committed ZIP is current;
-- generates `dist/SHA256SUMS` locally;
+- generates the canonical ZIP locally;
+- generates `dist/SHA256SUMS`;
 - verifies local `main` matches `origin/main`;
-- creates and pushes the annotated version tag when needed;
-- creates or updates the GitHub Release and its two assets.
+- creates and pushes an annotated version tag when needed;
+- creates or updates the GitHub Release and its assets.
 
-It uses the GitHub API through the authenticated `gh` command and does not start a GitHub Actions job.
-
-## Manual validation
+## Manual commands
 
 ```bash
 python3 scripts/validate_skill.py
 python3 scripts/build_zip.py
 python3 -m unittest discover -s tests -v
-git diff --exit-code -- dist/i-have-adhd-and-47-tabs.zip
+python3 scripts/score_responses.py --responses responses.jsonl
+gh skill publish --dry-run
 ```
