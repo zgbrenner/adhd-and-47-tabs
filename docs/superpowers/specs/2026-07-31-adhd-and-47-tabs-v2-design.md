@@ -9,7 +9,7 @@ Turn the repository into a coherent cross-platform Agent Skill that reduces cogn
 - Product title: **ADHD & 47 Tabs**
 - Skill and package slug: `adhd-and-47-tabs`
 - Repository: `zgbrenner/adhd-and-47-tabs`
-- Release asset: `adhd-and-47-tabs.zip`
+- Canonical package: `dist/adhd-and-47-tabs.zip`
 - Version: `2.0.0`
 
 The v2 package rename is intentionally breaking and is documented in the changelog and release notes.
@@ -32,24 +32,25 @@ These are defaults, not traps. Safety, factual accuracy, user-requested detail, 
 - `evals/cases.json` contains portable behavior scenarios and machine-readable expectations.
 - `scripts/score_responses.py` scores exported responses using dependency-free structural checks.
 - `scripts/validate_skill.py` validates metadata, identity, versioning, evaluation coverage, supporting files, and stale references.
-- `scripts/build_zip.py` creates a deterministic compressed ZIP with one canonical top-level folder.
-- `scripts/test_repository.py` checks the generated package and repository contracts.
-- `scripts/prepare_release.py` runs the checks and creates the ZIP and SHA-256 checksum for explicit maintainer review and upload.
+- `scripts/build_zip.py` deterministically rebuilds the canonical ZIP and SHA-256 checksum.
+- `scripts/test_repository.py` checks package integrity, folder layout, checksum correctness, and repository contracts.
+- `scripts/prepare_release.py` re-runs the checks and identifies the exact tracked assets for optional GitHub Release publication.
+- `dist/adhd-and-47-tabs.zip` and `dist/SHA256SUMS` are tracked convenience assets so a verified public download is always available.
 
 ## Evaluation strategy
 
 Quality checks have two layers:
 
-1. **Static contracts:** valid metadata, synchronized versions, canonical paths, complete supporting files, deterministic packaging, unique evaluation IDs, and no stale v1 identity in active surfaces.
+1. **Static contracts:** valid metadata, synchronized versions, canonical paths, complete supporting files, deterministic packaging, unique evaluation IDs, package integrity, checksum correctness, and no stale v1 identity in active surfaces.
 2. **Behavior shape:** scenarios cover direct answers, tasks, finished artifacts, deep explanations, high-stakes questions, creative work, emotional support, troubleshooting, and multi-turn project updates.
 
 The scorer is a regression aid, not a substitute for human review. Factual accuracy, sourcing, empathy, creative quality, and semantic completeness still require inspection.
 
 ## Packaging and release
 
-Validation remains local-only and dependency-free. `make check` validates the source, builds the ZIP, and runs repository checks. `make release` prepares the ZIP and `SHA256SUMS`; publication to GitHub Releases remains an explicit maintainer action.
+Validation remains local-only and dependency-free. `make check` validates the source, rebuilds the canonical ZIP and checksum, and runs repository checks. Any source change that affects the package must include the regenerated tracked assets in the same pull request.
 
-Generated archives are ignored by Git so stale binaries cannot drift from source.
+`make release` re-verifies those assets for optional GitHub Release publication. The repository copy remains authoritative, so installation does not depend on release-API availability.
 
 ## Compatibility
 

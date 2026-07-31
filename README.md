@@ -4,8 +4,7 @@
 
 > Your brain has enough tabs open. Your AI does not need to add twelve more.
 
-[![Latest release](https://img.shields.io/github/v/release/zgbrenner/adhd-and-47-tabs?display_name=tag)](https://github.com/zgbrenner/adhd-and-47-tabs/releases/latest)
-[![Download](https://img.shields.io/badge/download-adhd--and--47--tabs.zip-6f42c1.svg)](https://github.com/zgbrenner/adhd-and-47-tabs/releases/latest/download/adhd-and-47-tabs.zip)
+[![Download](https://img.shields.io/badge/download-adhd--and--47--tabs.zip-6f42c1.svg)](https://github.com/zgbrenner/adhd-and-47-tabs/raw/main/dist/adhd-and-47-tabs.zip)
 [![MIT License](https://img.shields.io/badge/license-MIT-2ea44f.svg)](LICENSE)
 
 ADHD & 47 Tabs makes the useful part of an AI response easier to find, start, and finish. It is not a medical tool and does not diagnose or treat ADHD. No diagnosis is required.
@@ -23,7 +22,7 @@ The goal is **lower cognitive load, not minimum word count**. Detailed requests 
 
 ## Download and upgrade
 
-[Download `adhd-and-47-tabs.zip`](https://github.com/zgbrenner/adhd-and-47-tabs/releases/latest/download/adhd-and-47-tabs.zip). Each release also includes `SHA256SUMS`.
+[Download the canonical `adhd-and-47-tabs.zip`](https://github.com/zgbrenner/adhd-and-47-tabs/raw/main/dist/adhd-and-47-tabs.zip) and verify it with [`SHA256SUMS`](dist/SHA256SUMS). The repository rebuilds both files deterministically during `make check`, so the public package stays synchronized with the skill source.
 
 Version 2 renamed the package from `i-have-adhd-and-47-tabs`. Remove or disable the old copy before installing v2 so both versions do not load together.
 

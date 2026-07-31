@@ -13,6 +13,8 @@ SKILL_DIR = ROOT / NAME
 SKILL = SKILL_DIR / "SKILL.md"
 VERSION_FILE = ROOT / "VERSION"
 EVAL_CASES = ROOT / "evals" / "cases.json"
+PACKAGE = ROOT / "dist" / f"{NAME}.zip"
+CHECKSUMS = ROOT / "dist" / "SHA256SUMS"
 OLD_REPOSITORY = "zgbrenner/i-have-adhd-and-47-tabs"
 OLD_ASSET = "i-have-adhd-and-47-tabs.zip"
 
@@ -62,8 +64,11 @@ def main() -> None:
         ROOT / "scripts" / "build_zip.py",
         ROOT / "scripts" / "score_responses.py",
         ROOT / "scripts" / "test_repository.py",
+        ROOT / "scripts" / "test_score_responses.py",
         ROOT / "scripts" / "prepare_release.py",
         ROOT / "dist" / ".gitkeep",
+        PACKAGE,
+        CHECKSUMS,
     ]:
         require_file(path)
 

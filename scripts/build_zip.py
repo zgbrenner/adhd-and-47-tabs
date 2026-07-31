@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import hashlib
 import zipfile
 from pathlib import Path, PurePosixPath
 
@@ -9,6 +10,7 @@ NAME = "adhd-and-47-tabs"
 SOURCE = ROOT / NAME
 DIST = ROOT / "dist"
 OUTPUT = DIST / f"{NAME}.zip"
+CHECKSUMS = DIST / "SHA256SUMS"
 FIXED_TIME = (2026, 7, 31, 0, 0, 0)
 EXCLUDED_DIRS = {".git", "__pycache__"}
 EXCLUDED_NAMES = {".DS_Store"}
@@ -56,7 +58,12 @@ def main() -> None:
                 compresslevel=9,
             )
 
-    print(f"Built {OUTPUT.relative_to(ROOT)} ({OUTPUT.stat().st_size:,} bytes)")
+    digest = hashlib.sha256(OUTPUT.read_bytes()).hexdigest()
+    CHECKSUMS.write_text(f"{digest}  {OUTPUT.name}\n", encoding="utf-8")
+    print(
+        f"Built {OUTPUT.relative_to(ROOT)} ({OUTPUT.stat().st_size:,} bytes)\n"
+        f"SHA-256: {digest}"
+    )
 
 
 if __name__ == "__main__":

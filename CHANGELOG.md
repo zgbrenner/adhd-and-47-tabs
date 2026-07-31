@@ -6,7 +6,7 @@ All notable changes are documented here.
 
 ### Breaking change
 
-- Renamed the canonical skill folder and package from `i-have-adhd-and-47-tabs` to `adhd-and-47-tabs` so the repository, skill name, install path, release asset, and product identity finally match.
+- Renamed the canonical skill folder and package from `i-have-adhd-and-47-tabs` to `adhd-and-47-tabs` so the repository, skill name, install path, package asset, and product identity match.
 - Existing installations should remove or disable the v1 skill before installing v2 to avoid loading both copies.
 
 ### Skill behavior
@@ -21,9 +21,12 @@ All notable changes are documented here.
 ### Quality and packaging
 
 - Added a portable behavior-evaluation suite with cross-platform scenarios and a dependency-free JSONL response scorer.
+- Added executable scorer regression tests for passing, failing, and malformed response exports.
 - Strengthened validation for Agent Skills metadata, synchronized versioning, referenced files, behavior requirements, evaluation coverage, duplicate JSON keys, stale identity strings, and loading-budget limits.
-- Switched to a compressed, deterministic release ZIP with one canonical top-level folder.
-- Removed stale generated package artifacts from the source contract and made local release generation authoritative.
+- Switched to a compressed, deterministic ZIP with one canonical top-level folder.
+- Added automatic SHA-256 generation and verification.
+- Track only the canonical `dist/adhd-and-47-tabs.zip` and `dist/SHA256SUMS` so a working verified download is always available from the repository.
+- Replaced automatic repository and release publishing scripts with explicit reviewed Git operations and local release preparation.
 - Updated installation, support, security, contribution, directory-submission, citation, publishing, and Custom GPT documentation.
 - Preserved local-only validation with no GitHub Actions, hosted CI, paid services, API keys, or third-party Python packages.
 
