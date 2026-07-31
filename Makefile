@@ -8,6 +8,7 @@ package: validate
 
 test: package
 	python3 scripts/test_repository.py
+	python3 scripts/test_score_responses.py
 
 check: test
 
