@@ -29,20 +29,23 @@ Version 2 renamed the package from `i-have-adhd-and-47-tabs`. Remove or disable 
 
 ## Claude
 
-1. Download the ZIP.
-2. Open **Customize → Skills**.
-3. Select **+ → Create skill → Upload a skill**.
-4. Upload and enable **ADHD & 47 Tabs**.
+Skills are available on Claude Free, Pro, Max, Team, and Enterprise plans, but code execution must be enabled.
+
+1. Enable **Code execution and file creation** in **Settings → Capabilities**. Team and Enterprise workspaces may require an owner to enable it in organization settings.
+2. Download the ZIP.
+3. Open **Customize → Skills**.
+4. Select **+ → Create skill → Upload a skill**.
+5. Upload and enable **ADHD & 47 Tabs**.
 
 Official guide: [Use skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude).
 
 ## ChatGPT
 
-Personal Skills availability depends on plan and workspace settings.
+OpenAI says Personal Skills are generally available for ChatGPT Business, Enterprise, Healthcare, and Edu accounts. Workspace administrators may also control access. Skills must currently be installed separately on desktop and web or mobile surfaces.
 
 1. Download the ZIP.
 2. Open **Plugins** in the ChatGPT sidebar.
-3. Select **Skills → Create → Upload from your computer**.
+3. Select the **Skills** tab, then **Create → Upload from your computer**.
 4. Upload the ZIP.
 
 Official guide: [Skills in ChatGPT](https://help.openai.com/en/articles/20001066).
