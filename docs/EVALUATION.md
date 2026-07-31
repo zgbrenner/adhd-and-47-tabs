@@ -14,7 +14,7 @@ Open `evals/cases.json`. For each case:
 4. Add one JSON object to `responses.jsonl`:
 
 ```json
-{"id":"direct-fact-no-forced-task","response":"Paris is the capital of France."}
+{"id":"direct-fact","response":"Paris is the capital of France."}
 ```
 
 Use one object per line. Newlines inside a response must be encoded as `\n` by whatever tool creates the JSONL file.
@@ -74,12 +74,14 @@ Each case needs:
 - an `expectations` object using supported checks;
 - `review_focus` notes for semantic review.
 
-List supported checks:
+Supported expectation keys are:
 
-```bash
-python3 scripts/score_responses.py --help
-```
-
-The implementation currently supports generic-opener checks, required or forbidden next steps, numbered-step limits, required or forbidden text and regular expressions, first-line requirements, and word-count floors or ceilings.
+- `forbid_generic_opener`;
+- `require_next_step` and `forbid_next_step`;
+- `max_numbered_steps` and `forbid_numbered_steps`;
+- `required_substrings`, `forbidden_substrings`, and `required_any_substrings`;
+- `first_line_required_substrings`;
+- `required_regexes` and `forbidden_regexes`;
+- `min_words` and `max_words`.
 
 Do not add a case merely to force one preferred wording. Test behavior that should remain stable across capable models.
