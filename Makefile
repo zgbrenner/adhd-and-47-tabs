@@ -1,4 +1,4 @@
-.PHONY: validate package test check install-hooks release
+.PHONY: validate package test check score install-hooks release
 
 validate:
 	python3 scripts/validate_skill.py
@@ -11,8 +11,12 @@ test: package
 
 check: test
 
+score:
+	@test -n "$(RESPONSES)" || (echo "Usage: make score RESPONSES=responses.jsonl" >&2; exit 2)
+	python3 scripts/score_responses.py --responses "$(RESPONSES)"
+
 install-hooks:
 	bash scripts/install_git_hooks.sh
 
 release:
-	bash scripts/create_release.sh
+	python3 scripts/prepare_release.py
