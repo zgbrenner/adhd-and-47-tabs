@@ -1,4 +1,4 @@
-# I Have ADHD and 47 Tabs
+# ADHD & 47 Tabs
 
 <strong>An action-first skill for Claude, ChatGPT, Codex, and Copilot. For work, research, and life.</strong>
 
