@@ -5,11 +5,12 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
-NAME = "i-have-adhd-and-47-tabs"
+NAME = "adhd-and-47-tabs"
 SOURCE = ROOT / NAME
 DIST = ROOT / "dist"
 OUTPUT = DIST / f"{NAME}.zip"
-FIXED_TIME = (2026, 7, 21, 0, 0, 0)
+STALE_OUTPUT = DIST / "i-have-adhd-and-47-tabs.zip"
+FIXED_TIME = (2026, 7, 31, 0, 0, 0)
 EXCLUDED_DIRS = {".git", "__pycache__"}
 EXCLUDED_NAMES = {".DS_Store"}
 EXCLUDED_SUFFIXES = {".pyc", ".pyo"}
@@ -31,19 +32,30 @@ def main() -> None:
         raise SystemExit(f"Missing {SOURCE / 'SKILL.md'}")
 
     DIST.mkdir(parents=True, exist_ok=True)
-    if OUTPUT.exists():
-        OUTPUT.unlink()
+    OUTPUT.unlink(missing_ok=True)
+    STALE_OUTPUT.unlink(missing_ok=True)
 
     files = sorted(path for path in SOURCE.rglob("*") if should_include(path))
-    with zipfile.ZipFile(OUTPUT, "w", compression=zipfile.ZIP_STORED) as archive:
-        for path in files:
-            relative = PurePosixPath(NAME) / PurePosixPath(path.relative_to(SOURCE).as_posix())
-            info = zipfile.ZipInfo(str(relative), FIXED_TIME)
-            info.compress_type = zipfile.ZIP_STORED
-            info.external_attr = 0o644 << 16
-            archive.writestr(info, path.read_bytes())
+    if not files:
+        raise SystemExit(f"No package files found in {SOURCE}")
 
-    print(f"Built {OUTPUT.relative_to(ROOT)}")
+    with zipfile.ZipFile(
+        OUTPUT,
+        "w",
+        compression=zipfile.ZIP_DEFLATED,
+        compresslevel=9,
+    ) as archive:
+        for path in files:
+            relative = PurePosixPath(NAME) / PurePosixPath(
+                path.relative_to(SOURCE).as_posix()
+            )
+            info = zipfile.ZipInfo(str(relative), FIXED_TIME)
+            info.compress_type = zipfile.ZIP_DEFLATED
+            info.create_system = 3
+            info.external_attr = 0o100644 << 16
+            archive.writestr(info, path.read_bytes(), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+
+    print(f"Built {OUTPUT.relative_to(ROOT)} ({OUTPUT.stat().st_size:,} bytes)")
 
 
 if __name__ == "__main__":
