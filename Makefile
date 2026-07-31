@@ -7,7 +7,7 @@ package: validate
 	python3 scripts/build_zip.py
 
 test: package
-	python3 -m unittest discover -s tests -v
+	python3 scripts/test_repository.py
 
 check: test
 
