@@ -2,11 +2,9 @@
 
 ## Goal
 
-Turn the repository into a coherent, cross-platform Agent Skill that reduces cognitive overhead without making answers incomplete, rigid, or artificially terse.
+Turn the repository into a coherent cross-platform Agent Skill that reduces cognitive overhead without making answers incomplete, rigid, or artificially terse.
 
 ## Canonical identity
-
-Use one identity everywhere:
 
 - Product title: **ADHD & 47 Tabs**
 - Skill and package slug: `adhd-and-47-tabs`
@@ -14,39 +12,44 @@ Use one identity everywhere:
 - Release asset: `adhd-and-47-tabs.zip`
 - Version: `2.0.0`
 
-The v2 package rename is intentionally breaking and will be documented in the changelog and release notes.
+The v2 package rename is intentionally breaking and is documented in the changelog and release notes.
 
 ## Behavioral model
 
-The skill will optimize for **low cognitive switching cost**, not minimum word count. It will route responses into four primary shapes:
+The skill optimizes for **lower cognitive load, not minimum word count**. It routes responses into four primary shapes:
 
-1. **Answer:** conclusion first, then the minimum evidence and caveats needed.
-2. **Action:** smallest useful action first, then bounded steps and a definition of done.
+1. **Answer:** conclusion first, then the evidence and caveats needed to trust it.
+2. **Action:** smallest useful action first, followed by bounded steps and a definition of done.
 3. **Artifact:** finished reusable output first, with only essential notes afterward.
 4. **Project update:** current state, completed work, blockers, and the next active step.
 
-Rules will be defaults, not traps. User-requested detail, safety, factual accuracy, emotional support, creative work, required formats, and complete deliverables override compression.
+These are defaults, not traps. Safety, factual accuracy, user-requested detail, emotional support, creative work, citations, and required formats override compression.
 
-## Skill architecture
+## Final architecture
 
-- `adhd-and-47-tabs/SKILL.md` contains the activation contract, routing logic, response contracts, exceptions, anti-patterns, and pre-send check.
-- `adhd-and-47-tabs/references/examples.md` contains diverse examples, including cases where the skill should remain detailed or should not force a next step.
+- `adhd-and-47-tabs/SKILL.md` contains activation guidance, routing logic, response contracts, exceptions, failure modes, and the pre-send check.
+- `adhd-and-47-tabs/references/examples.md` contains examples and edge cases.
 - `evals/cases.json` contains portable behavior scenarios and machine-readable expectations.
-- `scripts/score_responses.py` scores exported model responses with dependency-free structural checks.
-- `tests/test_repository.py` validates package identity, metadata, documentation, release paths, and evaluator behavior.
+- `scripts/score_responses.py` scores exported responses using dependency-free structural checks.
+- `scripts/validate_skill.py` validates metadata, identity, versioning, evaluation coverage, supporting files, and stale references.
+- `scripts/build_zip.py` creates a deterministic compressed ZIP with one canonical top-level folder.
+- `scripts/test_repository.py` checks the generated package and repository contracts.
+- `scripts/prepare_release.py` runs the checks and creates the ZIP and SHA-256 checksum for explicit maintainer review and upload.
 
 ## Evaluation strategy
 
-Repository checks will cover two layers:
+Quality checks have two layers:
 
-1. **Static contract checks:** valid Agent Skills metadata, synchronized versioning, canonical paths, no stale repository names, deterministic packaging, and complete documentation.
-2. **Behavior-shape checks:** scenario definitions must cover direct answers, multi-step tasks, completed artifacts, complex research, high-stakes questions, creative requests, emotional support, troubleshooting, and multi-turn project updates. The optional scorer will detect common failures such as generic preambles, excessive active steps, missing required next actions, and forced next actions after a complete answer.
+1. **Static contracts:** valid metadata, synchronized versions, canonical paths, complete supporting files, deterministic packaging, unique evaluation IDs, and no stale v1 identity in active surfaces.
+2. **Behavior shape:** scenarios cover direct answers, tasks, finished artifacts, deep explanations, high-stakes questions, creative work, emotional support, troubleshooting, and multi-turn project updates.
 
-The scorer is a regression aid, not a substitute for human review. Semantic accuracy and tone still require manual inspection.
+The scorer is a regression aid, not a substitute for human review. Factual accuracy, sourcing, empathy, creative quality, and semantic completeness still require inspection.
 
 ## Packaging and release
 
-Validation remains local-only and dependency-free. `make check` validates, packages, and runs tests. Releases are created locally with GitHub CLI, SHA-256 checksums, synchronized version metadata, clean-tree checks, and canonical repository verification.
+Validation remains local-only and dependency-free. `make check` validates the source, builds the ZIP, and runs repository checks. `make release` prepares the ZIP and `SHA256SUMS`; publication to GitHub Releases remains an explicit maintainer action.
+
+Generated archives are ignored by Git so stale binaries cannot drift from source.
 
 ## Compatibility
 
