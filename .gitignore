@@ -4,6 +4,7 @@ __pycache__/
 .DS_Store
 *~
 responses.jsonl
-dist/*.zip
-dist/SHA256SUMS
+dist/*
 !dist/.gitkeep
+!dist/adhd-and-47-tabs.zip
+!dist/SHA256SUMS
