@@ -1,10 +1,27 @@
 # Starter discussion copy
 
-Run the **Seed community discussions** workflow after GitHub Discussions is enabled. The workflow creates these posts once and skips titles that already exist:
+This repository intentionally has no GitHub Actions workflows. After GitHub Discussions is enabled, create these posts manually so each title and category can be reviewed before publication.
 
-1. **Welcome to I Have ADHD and 47 Tabs**
-2. **Share the AI answer that made you install this**
-3. **Which platform are you using it with?**
-4. **Which language should we translate next?**
+## Announcements
 
-The workflow uses the default `announcements`, `show-and-tell`, `general`, and `ideas` categories. If a category was renamed or removed, recreate it or adjust `.github/workflows/seed-discussions.yml`.
+### Welcome to ADHD & 47 Tabs
+
+ADHD & 47 Tabs is a cross-platform Agent Skill that helps AI responses surface the answer, finished output, or first action without stripping away necessary depth. Share which platform you use and what type of response you most want to improve.
+
+## Show and tell
+
+### Share the AI answer that made you install this
+
+Post a before-and-after example that shows a real reduction in cognitive load. Remove private, confidential, or identifying information first.
+
+## General
+
+### Which platform are you using it with?
+
+Include Claude, ChatGPT, Codex, GitHub Copilot, or another Agent Skills host, plus the skill version and any installation friction you encountered.
+
+## Ideas
+
+### Which language should we translate next?
+
+Name the language and whether you can translate, review, or test the behavior. Translations should preserve the response contracts rather than mirror every sentence literally.
