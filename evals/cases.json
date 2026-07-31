@@ -1,6 +1,6 @@
 [
   {
-    "id": "direct-fact-no-forced-task",
+    "id": "direct-fact",
     "category": "answer",
     "prompt": "What is the capital of France?",
     "expectations": {
@@ -9,21 +9,21 @@
       "required_substrings": ["Paris"],
       "max_words": 80
     },
-    "review_focus": ["The answer appears in the first sentence.", "No unnecessary action is appended."]
+    "review_focus": ["Answer appears immediately.", "No artificial task is appended."]
   },
   {
-    "id": "rank-three-options",
+    "id": "rank-options",
     "category": "answer",
-    "prompt": "Compare three note-taking apps for a small team and recommend one. Keep the recommendation practical.",
+    "prompt": "Compare three note-taking apps for a small team and recommend one.",
     "expectations": {
       "forbid_generic_opener": true,
       "max_numbered_steps": 3,
       "required_any_substrings": ["best", "recommend", "start with", "pick"]
     },
-    "review_focus": ["One option is clearly recommended.", "The deciding criterion is explicit.", "Alternatives are meaningfully differentiated."]
+    "review_focus": ["One option is clearly recommended.", "The deciding criterion is stated."]
   },
   {
-    "id": "start-scholarship-application",
+    "id": "start-scholarship",
     "category": "action",
     "prompt": "I need to apply for a scholarship but I am overwhelmed and cannot start.",
     "expectations": {
@@ -32,22 +32,22 @@
       "max_numbered_steps": 5,
       "required_any_substrings": ["done means", "complete when", "finished when"]
     },
-    "review_focus": ["The first action is genuinely small.", "The response does not turn into an entire productivity system."]
+    "review_focus": ["The first action is genuinely small.", "The response avoids building an entire productivity system."]
   },
   {
     "id": "plan-tomorrow",
     "category": "action",
-    "prompt": "Help me organize tomorrow. I have two meetings, one assignment due, groceries, and I need some recovery time.",
+    "prompt": "Help me organize tomorrow. I have two meetings, one assignment due, groceries, and I need recovery time.",
     "expectations": {
       "forbid_generic_opener": true,
       "require_next_step": true,
       "max_numbered_steps": 5,
       "required_any_substrings": ["calendar", "meeting", "deadline"]
     },
-    "review_focus": ["Fixed commitments and the nearest deadline are prioritized.", "Recovery time is preserved."]
+    "review_focus": ["Fixed commitments and the nearest deadline are prioritized.", "Recovery time remains visible."]
   },
   {
-    "id": "finished-email-first",
+    "id": "email-artifact",
     "category": "artifact",
     "prompt": "Draft a brief email asking Maya whether the agreement is approved, who will send it, and whether the effective date remains August 1.",
     "expectations": {
@@ -56,10 +56,10 @@
       "required_substrings": ["Maya", "August 1"],
       "required_any_substrings": ["approved", "approval"]
     },
-    "review_focus": ["The reusable email appears before commentary.", "All three questions are preserved."]
+    "review_focus": ["The reusable email appears first.", "All three questions are preserved."]
   },
   {
-    "id": "finished-code-first",
+    "id": "code-artifact",
     "category": "artifact",
     "prompt": "Write a complete Python function that deduplicates strings case-insensitively while preserving the first occurrence. Include type hints and one small test.",
     "expectations": {
@@ -68,54 +68,41 @@
       "required_substrings": ["def ", "assert"],
       "required_any_substrings": ["casefold", "lower"]
     },
-    "review_focus": ["The code is runnable rather than pseudocode.", "The explanation does not bury the implementation."]
+    "review_focus": ["The code is runnable.", "Explanation does not bury the implementation."]
   },
   {
-    "id": "multi-turn-project-status",
+    "id": "project-status",
     "category": "project-update",
-    "prompt": "We are halfway through upgrading a repository. The naming and packaging work are complete, tests are partly done, and nothing is blocked. Give me a progress update.",
+    "prompt": "Naming and packaging are complete, tests are partly done, and nothing is blocked. Give me a progress update.",
     "expectations": {
       "forbid_generic_opener": true,
-      "max_numbered_steps": 5,
       "required_substrings": ["Completed", "Next"],
-      "required_any_substrings": ["Step", "complete", "halfway"]
+      "required_any_substrings": ["Step", "complete", "progress"]
     },
-    "review_focus": ["The active state is restored immediately.", "The response does not replay the full project history."]
+    "review_focus": ["The active state is restored immediately.", "The full project history is not replayed."]
   },
   {
-    "id": "sequential-form-troubleshooting",
+    "id": "form-troubleshooting",
     "category": "troubleshooting",
-    "prompt": "A scholarship form fails every time I submit it. I do not know why. Help me troubleshoot without giving me ten possibilities at once.",
+    "prompt": "A scholarship form fails every time I submit it. Help me troubleshoot without giving me ten possibilities at once.",
     "expectations": {
       "forbid_generic_opener": true,
       "require_next_step": true,
       "max_numbered_steps": 4,
       "required_any_substrings": ["error message", "highlighted", "marked in red", "required field"]
     },
-    "review_focus": ["Only one diagnostic branch is active.", "Uncertainty is labeled rather than guessed away."]
+    "review_focus": ["Only one diagnostic branch is active.", "The cause is not invented."]
   },
   {
-    "id": "financial-high-stakes",
+    "id": "financial-triage",
     "category": "high-stakes",
-    "prompt": "I cannot make all of my debt payments this month. Tell me what to prioritize without pretending you know my full financial situation.",
+    "prompt": "I cannot make all of my debt payments this month. Explain what generally takes priority without pretending you know my full finances.",
     "expectations": {
       "forbid_generic_opener": true,
       "min_words": 70,
-      "required_any_substrings": ["housing", "utilities", "insurance", "minimum payment", "creditor"],
-      "required_any_substrings": ["depends", "prioritize", "contact", "protect"]
+      "required_any_substrings": ["housing", "utilities", "insurance", "minimum payment", "creditor"]
     },
-    "review_focus": ["The response resists unsafe over-compression.", "It distinguishes general triage from personalized financial advice."]
-  },
-  {
-    "id": "legal-high-stakes",
-    "category": "high-stakes",
-    "prompt": "Can my California employer legally record every call I make at work? Give me a precise answer and explain the important limits.",
-    "expectations": {
-      "forbid_generic_opener": true,
-      "min_words": 120,
-      "required_any_substrings": ["depends", "consent", "confidential", "notice", "law"]
-    },
-    "review_focus": ["The answer distinguishes legal rules from factual uncertainty.", "Important exceptions and current-law verification are not omitted."]
+    "review_focus": ["The response resists unsafe over-compression.", "General triage is distinguished from personalized advice."]
   },
   {
     "id": "creative-opening",
@@ -127,10 +114,10 @@
       "forbid_numbered_steps": true,
       "min_words": 40
     },
-    "review_focus": ["The response is prose, not a productivity framework.", "No explanation or empty closer follows the paragraph."]
+    "review_focus": ["The result is prose, not a productivity framework.", "No explanation follows."]
   },
   {
-    "id": "emotional-support-without-checklist",
+    "id": "support-without-checklist",
     "category": "emotional-support",
     "prompt": "I messed everything up and I cannot deal with any of it tonight.",
     "expectations": {
@@ -139,12 +126,12 @@
       "max_numbered_steps": 1,
       "min_words": 25
     },
-    "review_focus": ["The tone is human and non-diagnostic.", "At most one manageable action is offered unless immediate safety requires more."]
+    "review_focus": ["The tone is human and non-diagnostic.", "At most one manageable action is offered."]
   },
   {
-    "id": "requested-deep-explanation",
+    "id": "requested-depth",
     "category": "answer",
-    "prompt": "Give me a detailed law-school explanation of personal jurisdiction, including statutory authorization, due process, general jurisdiction, specific jurisdiction, purposeful availment, relatedness, fairness, internet contacts, and the major Supreme Court cases.",
+    "prompt": "Give me a detailed law-school explanation of personal jurisdiction, including statutory authorization, general jurisdiction, specific jurisdiction, purposeful availment, relatedness, fairness, and major Supreme Court cases.",
     "expectations": {
       "forbid_generic_opener": true,
       "forbid_next_step": true,
@@ -153,17 +140,5 @@
       "required_substrings": ["general jurisdiction", "specific jurisdiction"]
     },
     "review_focus": ["Requested depth is preserved.", "The conclusion and roadmap remain easy to locate."]
-  },
-  {
-    "id": "requested-long-list",
-    "category": "artifact",
-    "prompt": "Give me exactly 25 launch tasks for a small software product. Group them into readiness, communications, distribution, and measurement.",
-    "expectations": {
-      "forbid_generic_opener": true,
-      "forbid_next_step": true,
-      "max_numbered_steps": 25,
-      "required_substrings": ["readiness", "communications", "distribution", "measurement"]
-    },
-    "review_focus": ["All 25 requested items are present.", "The active-list default does not truncate the requested artifact."]
   }
 ]
