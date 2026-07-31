@@ -37,6 +37,11 @@ def parse_json_without_duplicate_keys(path: Path) -> Any:
         fail(f"invalid JSON in {path.relative_to(ROOT)}: {exc}")
 
 
+def require_file(path: Path) -> None:
+    if not path.is_file():
+        fail(f"missing {path.relative_to(ROOT)}")
+
+
 def main() -> None:
     skill_dirs = sorted(
         path for path in ROOT.iterdir() if path.is_dir() and (path / "SKILL.md").is_file()
@@ -44,10 +49,30 @@ def main() -> None:
     if skill_dirs != [SKILL_DIR]:
         found = ", ".join(str(path.relative_to(ROOT)) for path in skill_dirs) or "none"
         fail(f"expected exactly one top-level skill folder named {NAME}; found: {found}")
-    if not SKILL.is_file():
-        fail(f"missing {SKILL.relative_to(ROOT)}")
-    if not VERSION_FILE.is_file():
-        fail("missing VERSION")
+
+    for path in [
+        SKILL,
+        VERSION_FILE,
+        SKILL_DIR / "references" / "examples.md",
+        SKILL_DIR / "LICENSE",
+        SKILL_DIR / "NOTICE.md",
+        SKILL_DIR / "README.md",
+        EVAL_CASES,
+        ROOT / "docs" / "EVALUATION.md",
+        ROOT / "scripts" / "build_zip.py",
+        ROOT / "scripts" / "score_responses.py",
+        ROOT / "scripts" / "test_repository.py",
+        ROOT / "scripts" / "prepare_release.py",
+        ROOT / "dist" / ".gitkeep",
+    ]:
+        require_file(path)
+
+    if (ROOT / "i-have-adhd-and-47-tabs").exists():
+        fail("retired v1 skill folder must not exist")
+    if (ROOT / "scripts" / "create_release.sh").exists():
+        fail("retired remote release script must not exist")
+    if (ROOT / "scripts" / "publish_to_github.sh").exists():
+        fail("retired repository publishing script must not exist")
 
     version = VERSION_FILE.read_text(encoding="utf-8").strip()
     if not re.fullmatch(r"\d+\.\d+\.\d+", version):
@@ -66,12 +91,9 @@ def main() -> None:
     compatibility_match = re.search(r"(?m)^compatibility:\s*(.+?)\s*$", frontmatter)
     version_match = re.search(r'(?m)^\s+version:\s*["\']?([^"\'\s]+)["\']?\s*$', frontmatter)
 
-    if not name_match:
-        fail("frontmatter name is required")
-    name = name_match.group(1).strip()
-    if name != NAME:
+    if not name_match or name_match.group(1).strip() != NAME:
         fail(f"frontmatter name must be {NAME}")
-    if len(name) > 64 or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name):
+    if len(NAME) > 64 or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", NAME):
         fail("frontmatter name must be 1-64 lowercase letters, numbers, or hyphens")
 
     if not description_match:
@@ -84,17 +106,15 @@ def main() -> None:
 
     if compatibility_match and len(compatibility_match.group(1).strip()) > 500:
         fail("frontmatter compatibility must be 500 characters or fewer")
-
     if not version_match or version_match.group(1) != version:
         found = version_match.group(1) if version_match else "missing"
         fail(f"SKILL.md metadata version must match VERSION ({version}); found: {found}")
-
     if len(text.splitlines()) > 500:
         fail("SKILL.md exceeds the recommended 500-line loading budget")
-    if "TODO" in text or "TBD" in text:
+    if re.search(r"\b(?:TODO|TBD)\b", text):
         fail("SKILL.md contains an unfinished TODO or TBD marker")
 
-    required_body_signals = [
+    for signal in [
         "lower cognitive load, not minimum word count",
         "Answer contract",
         "Action contract",
@@ -105,23 +125,9 @@ def main() -> None:
         "Emotional support",
         "Creative work",
         "definition of done",
-    ]
-    for signal in required_body_signals:
+    ]:
         if signal.casefold() not in text.casefold():
             fail(f"SKILL.md is missing required behavior signal: {signal}")
-
-    required_files = [
-        SKILL_DIR / "references" / "examples.md",
-        SKILL_DIR / "LICENSE",
-        SKILL_DIR / "NOTICE.md",
-        SKILL_DIR / "README.md",
-        EVAL_CASES,
-        ROOT / "scripts" / "score_responses.py",
-        ROOT / "docs" / "EVALUATION.md",
-    ]
-    missing = [str(path.relative_to(ROOT)) for path in required_files if not path.is_file()]
-    if missing:
-        fail(f"missing supporting files: {', '.join(missing)}")
 
     if "references/examples.md" not in text:
         fail("SKILL.md must link to references/examples.md")
@@ -152,6 +158,8 @@ def main() -> None:
             fail(f"evaluation case {case_id} has no prompt")
         if not isinstance(expectations, dict):
             fail(f"evaluation case {case_id} expectations must be an object")
+        if not case.get("review_focus"):
+            fail(f"evaluation case {case_id} has no human review focus")
 
     required_categories = {
         "answer",
@@ -179,14 +187,13 @@ def main() -> None:
         ROOT / "docs" / "DISCUSSION_SEEDS.md",
         ROOT / ".github" / "ISSUE_TEMPLATE" / "config.yml",
         ROOT / "scripts" / "build_zip.py",
-        ROOT / "scripts" / "create_release.sh",
-        ROOT / "scripts" / "publish_to_github.sh",
+        ROOT / "scripts" / "test_repository.py",
+        ROOT / "scripts" / "prepare_release.py",
         SKILL,
         SKILL_DIR / "README.md",
     ]
     for path in canonical_surfaces:
-        if not path.is_file():
-            fail(f"missing canonical surface: {path.relative_to(ROOT)}")
+        require_file(path)
         surface = path.read_text(encoding="utf-8")
         if OLD_REPOSITORY in surface:
             fail(f"stale repository name in {path.relative_to(ROOT)}")
