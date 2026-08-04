@@ -89,10 +89,9 @@ Official guide: [Use skills in Claude](https://support.claude.com/en/articles/12
 ### ChatGPT
 
 1. Download the ZIP.
-2. Open **Plugins** in the ChatGPT sidebar.
-3. Open the **Skills** tab.
-4. Select **Create → Upload from your computer**.
-5. Upload the ZIP.
+2. Open ChatGPT's **Skills** page. In the current web interface, this is under **Plugins → Skills** in the sidebar.
+3. Select **Create → Upload from your computer**.
+4. Upload the ZIP.
 
 Workspace administrators may control skill creation, uploading, installation, and sharing. Personal skills may need to be installed separately on different ChatGPT surfaces.
 
@@ -102,13 +101,13 @@ For accounts without uploaded Skills, copy [`chatgpt-custom-gpt/INSTRUCTIONS.md`
 
 ### Codex
 
-Inside Codex, ask the built-in installer to fetch this repository skill:
+Inside Codex, invoke the built-in installer:
 
 ```text
-$skill-installer install https://github.com/zgbrenner/adhd-and-47-tabs/tree/main/adhd-and-47-tabs
+$skill-installer
 ```
 
-For a manual user-wide install, place the `adhd-and-47-tabs` folder at `~/.agents/skills/adhd-and-47-tabs`. For a repository-scoped install, place it at `.agents/skills/adhd-and-47-tabs` inside that repository. Codex detects skill changes automatically; restart only when an install or update does not appear.
+Then ask it to install the `adhd-and-47-tabs` skill from this repository's `adhd-and-47-tabs` folder. For a manual user-wide install, place that folder at `~/.agents/skills/adhd-and-47-tabs`. For a repository-scoped install, place it at `.agents/skills/adhd-and-47-tabs` inside the repository. Codex detects skill changes automatically; restart only when an install or update does not appear.
 
 The package includes `agents/openai.yaml` so ChatGPT desktop and Codex can show a clean display name, description, default prompt, and implicit-invocation policy.
 
