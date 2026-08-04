@@ -1,13 +1,23 @@
 cff-version: 1.2.0
+message: "If you use ADHD & 47 Tabs, please cite this repository."
 title: "ADHD & 47 Tabs"
-message: "Please credit both the original skill author and the adaptation author."
 type: software
 authors:
-  - family-names: Ghriss
-    given-names: Ayoub
   - family-names: Brenner
     given-names: Zachary
-version: 2.0.0
-date-released: 2026-07-31
+  - family-names: Ghriss
+    given-names: Ayoub
+version: "3.0.0"
+date-released: 2026-08-04
 license: MIT
 repository-code: "https://github.com/zgbrenner/adhd-and-47-tabs"
+url: "https://github.com/zgbrenner/adhd-and-47-tabs"
+abstract: "A cross-platform Agent Skill for lower-friction answers, bounded working sets, interruption recovery, memory offloading, decision support, repeated-failure recovery, and reliable finishing."
+keywords:
+  - agent-skills
+  - accessibility
+  - cognitive-load
+  - adhd
+  - executive-function
+  - prompt-engineering
+  - evaluation

@@ -1,0 +1,6 @@
+interface:
+  display_name: "ADHD & 47 Tabs"
+  short_description: "Clearer answers, smaller working sets, easy resuming."
+  default_prompt: "Use ADHD & 47 Tabs to make this easier to find, start, resume, and finish without losing necessary depth."
+policy:
+  allow_implicit_invocation: true

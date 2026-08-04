@@ -1,41 +1,25 @@
 # Security policy
 
-This repository distributes instruction and documentation files plus small standard-library validation and packaging scripts. The skill itself requires no network access, credentials, executable scripts, or third-party packages.
+ADHD & 47 Tabs is an instruction-only Agent Skill. The uploaded package contains Markdown instructions and references, one YAML host-metadata file, and the MIT license. It has no executable code, package installation, credentials, telemetry, network calls, or background processes.
 
-## Supported versions
+## Supported version
 
-| Version | Supported |
-| --- | --- |
-| 2.x | Yes |
-| 1.x | Security fixes only |
-| Earlier versions | No |
+Security fixes are made for the latest released version.
 
-Install the latest release before reporting a problem that may already be fixed.
+## Reporting
 
-## Private vulnerability reporting
+Report suspected prompt injection, unsafe instructions, packaging tampering, credential exposure, path traversal, malicious bundled content, or checksum mismatch privately through GitHub's security-reporting features when available.
 
-Do not open a public issue for a vulnerability that could expose credentials, enable unsafe execution, tamper with a release ZIP, or introduce malicious skill instructions.
+Do not include secrets, personal data, or exploit payloads in a public issue.
 
-Use [GitHub private vulnerability reporting](https://github.com/zgbrenner/adhd-and-47-tabs/security/advisories/new). This creates a private advisory visible only to the reporter and repository maintainers.
+## Supply-chain checks
 
-Include:
+Before enabling any downloaded skill:
 
-- the affected file and release version;
-- the unsafe behavior and likely impact;
-- a minimal reproduction or proof of concept;
-- any suggested mitigation;
-- whether you believe the issue is already being exploited.
+1. Review its contents.
+2. Verify the ZIP against `dist/SHA256SUMS`.
+3. Confirm the root folder is `adhd-and-47-tabs`.
+4. Confirm the package contains no scripts or unexpected binary files.
+5. Download from this repository or its GitHub Release.
 
-## Response targets
-
-The maintainer will aim to acknowledge a report within 3 business days and provide an initial assessment within 7 business days. These are targets, not guarantees, for a volunteer-maintained project.
-
-## In scope
-
-- malicious or hidden instructions in the distributed skill;
-- release-asset tampering or checksum mismatch;
-- packaging behavior that includes unintended files;
-- scripts that expose credentials or change unrelated files;
-- installation instructions that create a material security risk.
-
-General prompt-quality disagreements, medical questions, and ordinary installation failures are not security vulnerabilities. Use Discussions or Issues for those.
+`make check` verifies deterministic archive entries, paths, file types, permissions, timestamps, source equality, and checksum.

@@ -1,92 +1,96 @@
 # Contributing
 
-Contributions should make the skill easier to trigger, easier to follow, safer to share, or easier to install.
+Contributions should make ADHD & 47 Tabs easier to use **without deleting necessary substance**.
 
-You do not need to be a developer. Clear examples, installation testing, accessibility feedback, translations, and reports of confusing behavior are valuable.
+## Before proposing a change
 
-## Good contributions
+Read:
 
-- Add a realistic regression scenario to `evals/cases.json`.
-- Report a case where the skill triggered too often, failed to trigger, over-compressed an answer, or added unnecessary structure.
-- Test installation in Claude, ChatGPT, Codex, GitHub Copilot, or another Agent Skills host.
-- Improve accessibility, clarity, examples, translations, validation, packaging, or documentation.
+- `adhd-and-47-tabs/SKILL.md`
+- `adhd-and-47-tabs/references/interaction-patterns.md`
+- `docs/RESEARCH.md`
+- `docs/EVALUATION.md`
 
-Questions and early ideas belong in [GitHub Discussions](https://github.com/zgbrenner/adhd-and-47-tabs/discussions). Reproducible bugs and scoped changes belong in [Issues](https://github.com/zgbrenner/adhd-and-47-tabs/issues).
+A behavior change should answer:
 
-## Source of truth
+1. What real friction or failure does this fix?
+2. Which base contract or modifier owns the behavior?
+3. Does it preserve safety, accuracy, warmth, and requested depth?
+4. What regression case proves the change?
+5. Does it remain portable and dependency-free?
 
-Edit the source files inside `adhd-and-47-tabs/`.
+## Local requirements
 
-Do not manually edit `dist/adhd-and-47-tabs.zip` or `dist/SHA256SUMS`. `make check` regenerates both deterministically, and both are tracked so the repository always exposes a verified download. Commit regenerated package files in the same pull request as any source change that alters them.
+Python 3 and Make are sufficient. The skill itself contains no executable code.
 
-Repository-level installation, community, evaluation, and release documentation lives at the repository root and in `docs/`.
-
-## Behavior-change workflow
-
-A behavior change needs evidence before prose:
-
-1. Add or identify a prompt that exposes the failure.
-2. Record the undesired response and the reusable failure mode.
-3. Add a focused case or test that fails for the current behavior.
-4. Make the smallest skill change that addresses the failure without damaging valid exceptions.
-5. Re-run the structural scorer and manually review the result.
-
-Do not add rules merely to force one preferred phrase. Test stable response behavior.
-
-## Content guardrails
-
-Contributions must:
-
-1. Preserve attribution to Ayoub Ghriss and the MIT license.
-2. Optimize for lower cognitive load rather than universally short answers.
-3. Avoid diagnosis, treatment claims, or presenting one attention style as universal.
-4. Preserve accuracy, citations, uncertainty, necessary detail, and the user's requested format.
-5. Keep answer, action, artifact, and project-update contracts internally consistent.
-6. Keep stop phrases and Custom GPT instructions synchronized when behavior changes.
-7. Add examples or evaluation coverage for meaningful new rules.
-
-## Translation contributions
-
-Place each translation in a language folder under `translations/`, using a BCP 47 language tag where practical:
-
-```text
-translations/es/
-translations/fr/
-translations/de/
-translations/pt-BR/
-```
-
-A translation should include a translated skill, a short README, the source version, attribution, and a fluent reviewer when available. Preserve behavioral meaning rather than translating every sentence literally.
-
-## Before opening a pull request
-
-1. Keep the change focused.
-2. Add or update tests for behavior or package changes.
-3. Update documentation when an installation path changes.
-4. Run `make check`.
-5. Run `gh skill publish --dry-run` when GitHub CLI supports it.
-6. Explain the user-visible effect and any trade-offs.
-7. Confirm no credentials, personal data, or cache files are included.
-8. Confirm regenerated package assets match the source and are included when changed.
-
-## Local checks
+Run:
 
 ```bash
 make check
+make release
 ```
 
-Optional behavior scoring:
-
-```bash
-make score RESPONSES=responses.jsonl
-```
-
-Optional one-time pre-push hook:
+Optional local protection:
 
 ```bash
 make install-hooks
 ```
 
-This repository intentionally has no GitHub Actions or hosted CI. No third-party Python packages are required.
+The pre-push hook runs `make check` locally. This repository intentionally has no GitHub Actions or hosted CI.
 
-By contributing, you agree that your contribution will be licensed under the repository's MIT License.
+## Behavior changes
+
+For changes to the skill or references:
+
+1. Update the smallest responsible file.
+2. Add or update a case in `evals/cases.json`.
+3. Add an example when the interaction shape is not already obvious.
+4. Update the research ledger when a new external source materially informs the design.
+5. Run the complete local suite.
+6. Rebuild and commit `dist/adhd-and-47-tabs.zip` and `dist/SHA256SUMS`.
+
+Do not add rigid rules that:
+
+- make every answer short;
+- force a task after a complete answer;
+- truncate requested artifacts;
+- infer diagnosis or energy;
+- remove necessary high-stakes guidance;
+- create false urgency or unsupported estimates;
+- require a particular vendor, host, timer, note app, or task manager.
+
+## Evaluation changes
+
+`evals/cases.json` uses schema version 2. Every case must have:
+
+- a unique stable ID;
+- one category;
+- exactly one prompt or conversation;
+- supported deterministic expectations;
+- non-empty human-review focus.
+
+When adding a new assertion:
+
+1. Write a failing unit test in `scripts/test_score_responses.py`.
+2. Implement the assertion in `scripts/score_responses.py`.
+3. Document it in `docs/EVALUATION.md`.
+4. Add a real suite case that uses it.
+
+## Documentation and attribution
+
+Use primary sources whenever possible. Preserve attribution to Ayoub Ghriss and Zachary Brenner in the MIT license, notice, metadata, citation, and package.
+
+Do not copy substantial prose or code from another project. Record adopted principles and rejected scope in `docs/RESEARCH.md`.
+
+## Pull requests
+
+A pull request should include:
+
+- behavioral summary;
+- regression coverage;
+- local verification output;
+- package checksum;
+- migration or compatibility impact;
+- any research sources added.
+
+No credentials, API keys, generated caches, untracked release assets, remote publishing scripts, or hosted workflow files are accepted.

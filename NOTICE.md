@@ -4,19 +4,23 @@
 
 This project is adapted from **[`ayghri/i-have-adhd`](https://github.com/ayghri/i-have-adhd)** by **Ayoub Ghriss**.
 
-The upstream project introduced the core response-design concept: lead with the useful action, number multi-step work, preserve state, suppress tangents, make progress visible, and remove empty preambles and closers.
+The upstream project introduced the central response-design concept: surface the useful action, bound multi-step work, preserve state, suppress tangents, make progress visible, and remove empty preambles and closers.
 
 ## This adaptation
 
-**ADHD & 47 Tabs** was adapted by **Zachary Brenner** for cross-platform use across research, school, writing, planning, administrative work, everyday questions, decisions, and technical tasks.
+**ADHD & 47 Tabs** was adapted by **Zachary Brenner** for cross-platform use across research, school, writing, planning, administrative work, decisions, everyday logistics, and technical work.
 
-Material changes include:
+Material changes through version 3 include:
 
-1. A response model that optimizes for cognitive load rather than universally short answers.
-2. Separate answer, action, artifact, and project-update contracts.
-3. Explicit exceptions for requested depth, creative work, emotional support, complex questions, ambiguity, and irreversible actions.
-4. General-purpose examples and portable behavior-evaluation scenarios.
-5. Claude, ChatGPT, Codex, GitHub Copilot, compatible Agent Skills, and Custom GPT installation paths.
-6. Reproducible packaging, local validation, response scoring, release preparation, and open-source project documentation.
+1. Optimizing for lower cognitive load rather than universal brevity.
+2. Separating Answer, Action, Artifact, and Project-update contracts.
+3. Adding Friction, Reorientation, Memory-offload, Decision, Recovery, and Finish modifiers.
+4. Adding interruption breadcrumbs, a bounded working set, remembered constraints, repeated-failure resets, finish protection, and compact conversation controls.
+5. Preserving explicit overrides for requested depth, creative work, emotional support, high-stakes guidance, ambiguity, and irreversible actions.
+6. Building a 47-case provider-neutral regression suite with single-turn and multi-turn scenarios, deterministic reports, and human-review criteria.
+7. Adding deterministic local validation and packaging, SHA-256 verification, current host metadata, installation documentation, and a research ledger.
+8. Supporting Claude, ChatGPT Skills, Codex, GitHub Copilot, compatible Agent Skills hosts, and a Custom GPT fallback without adding executable skill code or external dependencies.
 
-Both the upstream work and this adaptation are distributed under the MIT License. The upstream copyright notice is preserved in `LICENSE`.
+The adaptation synthesizes principles from the primary sources recorded in [`docs/RESEARCH.md`](docs/RESEARCH.md). It does not copy substantial prose or code from those projects.
+
+Both the upstream work and this adaptation are distributed under the MIT License. The upstream copyright notice is preserved in [`LICENSE`](LICENSE).

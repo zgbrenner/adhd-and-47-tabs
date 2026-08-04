@@ -1,87 +1,165 @@
-# Behavior evaluation
+# Evaluation guide
 
-`make check` validates the package and repository contract. The optional behavior suite checks whether a model using **ADHD & 47 Tabs** produces the intended response shape across common and adversarial scenarios.
+ADHD & 47 Tabs uses a 47-case provider-neutral, local-first regression suite, including nine multi-turn cases. It is designed to catch structural behavior regressions without pretending that regexes can judge every semantic quality.
 
-The evaluator is dependency-free and does not call any model API. You can use it with Claude, ChatGPT, Codex, GitHub Copilot, or any other host by collecting responses manually or through your own approved tooling.
+## Suite format
 
-## 1. Run the scenarios
+`evals/cases.json` uses schema version 2:
 
-Open `evals/cases.json`. For each case:
+```json
+{
+  "schema_version": 2,
+  "suite": {
+    "name": "ADHD & 47 Tabs",
+    "slug": "adhd-and-47-tabs",
+    "version": "3.0.0"
+  },
+  "cases": []
+}
+```
 
-1. Start a fresh conversation with the skill enabled.
-2. Send the exact `prompt` value.
-3. Copy the complete response.
-4. Add one JSON object to `responses.jsonl`:
+Each case contains:
+
+- a stable `id`;
+- a `category` and optional `tags`;
+- exactly one `prompt` or `conversation`;
+- deterministic `expectations`;
+- one or more `review_focus` statements for human inspection.
+
+A `conversation` is an ordered array of `system`, `user`, and `assistant` turns. Send the full conversation to the model under test and capture only the final assistant response.
+
+## Response export
+
+Create a UTF-8 JSONL file with one row per case:
 
 ```json
 {"id":"direct-fact","response":"Paris is the capital of France."}
+{"id":"resume-after-interruption","response":"You are here: draft the article → outline complete → write the opening section."}
 ```
 
-Use one object per line. Newlines inside a response must be encoded as `\n` by whatever tool creates the JSONL file.
+The scorer rejects duplicate IDs, empty responses, malformed JSON, and IDs that do not exist in the suite. Missing known cases are reported as scored failures.
 
-## 2. Score the responses
+## Run the scorer
+
+Text report:
 
 ```bash
 python3 scripts/score_responses.py --responses responses.jsonl
 ```
 
-To use a custom case file:
+JSON report:
 
 ```bash
 python3 scripts/score_responses.py \
-  --cases path/to/cases.json \
-  --responses path/to/responses.jsonl
+  --responses responses.jsonl \
+  --format json \
+  --output report.json
+```
+
+Markdown report:
+
+```bash
+python3 scripts/score_responses.py \
+  --responses responses.jsonl \
+  --format markdown \
+  --output report.md
+```
+
+Make shortcuts:
+
+```bash
+make score RESPONSES=responses.jsonl
+make score-json RESPONSES=responses.jsonl OUTPUT=report.json
+make score-markdown RESPONSES=responses.jsonl OUTPUT=report.md
 ```
 
 Exit codes:
 
-- `0`: every case passed its structural checks.
-- `1`: one or more responses failed expectations or are missing.
-- `2`: the case or response file is invalid.
+- `0`: every supplied suite case passed;
+- `1`: one or more cases failed or were missing;
+- `2`: suite, response export, regex, or CLI input was malformed.
 
-## 3. Perform human review
+## Deterministic assertions
 
-The scorer catches structural regressions such as:
+The scorer supports:
 
-- generic preambles;
-- missing or forced `Next:` lines;
-- too many active numbered steps;
-- missing required terms;
-- over-compressed high-stakes answers;
-- checklist formatting where prose is required.
+- `forbid_generic_opener`
+- `forbid_generic_closer`
+- `require_next_step`
+- `forbid_next_step`
+- `max_numbered_steps`
+- `forbid_numbered_steps`
+- `max_bullet_items`
+- `min_total_list_items`
+- `max_total_list_items`
+- `max_questions`
+- `max_headings`
+- `min_paragraphs`
+- `max_paragraphs`
+- `required_substrings`
+- `forbidden_substrings`
+- `required_any_substrings`
+- `first_line_required_substrings`
+- `required_regexes`
+- `forbidden_regexes`
+- `required_ordered_substrings`
+- `required_any_headings`
+- `require_first_line_regex`
+- `min_words`
+- `max_words`
 
-It cannot determine whether an answer is factually correct, well sourced, legally or medically sound, genuinely empathetic, creatively strong, or semantically complete. Review every case's `review_focus` fields manually.
+Assertions are intentionally simple, transparent, deterministic, and provider-independent.
 
-A strong evaluation record should include:
+## What structural scoring can catch
 
-- model and host;
-- model version when visible;
-- skill version;
-- date tested;
-- raw response JSONL;
-- scorer output;
-- brief human notes for failures and borderline cases.
+- empty throat-clearing before the answer;
+- empty closing offers after a complete answer;
+- a forced `Next:` line where no task remains;
+- missing interruption-recovery breadcrumbs;
+- too many simultaneously active list items;
+- missing ordered recovery sections;
+- missing required values carried from prior turns;
+- responses that truncate a requested deep dive, long artifact, requested option count, or paragraph structure;
+- stop-mode responses that keep talking;
+- absent safety or escalation terminology in selected high-stakes cases.
 
-## Adding a regression case
+## What requires human review
 
-Add a case when a real response reveals a reusable failure mode.
+Read the response against each case's `review_focus`. In particular, inspect:
 
-Each case needs:
+- factual accuracy and source quality;
+- whether the first action is meaningful rather than trivial;
+- whether recommendations are well reasoned;
+- whether remembered information is reliable and used appropriately;
+- whether the **You are here:** state is actually supported by the conversation;
+- whether a diagnostic distinguishes plausible causes;
+- whether finish protection preserves every real requirement;
+- whether tone is humane in emotional-support cases;
+- whether high-stakes caveats are proportional;
+- whether creative or detailed requests retain their intended experience;
+- whether the response is concise enough to navigate but complete enough to use.
 
-- a unique `id`;
-- a `category`;
-- the exact `prompt`;
-- an `expectations` object using supported checks;
-- `review_focus` notes for semantic review.
+A structural pass is not a semantic certification.
 
-Supported expectation keys are:
+## Regression workflow
 
-- `forbid_generic_opener`;
-- `require_next_step` and `forbid_next_step`;
-- `max_numbered_steps` and `forbid_numbered_steps`;
-- `required_substrings`, `forbidden_substrings`, and `required_any_substrings`;
-- `first_line_required_substrings`;
-- `required_regexes` and `forbidden_regexes`;
-- `min_words` and `max_words`.
+1. Add or edit behavior in `SKILL.md` or a focused reference.
+2. Add at least one case that fails under the old behavior and represents a real use or failure mode.
+3. Generate responses from the model or host being evaluated.
+4. Run the scorer.
+5. Review every failed assertion and every `review_focus`.
+6. Compare against a known-good baseline when changing models, host versions, or skill wording.
+7. Run `make check` before packaging or release.
 
-Do not add a case merely to force one preferred wording. Test behavior that should remain stable across capable models.
+## Case design rules
+
+A strong case:
+
+- tests one primary behavior;
+- includes enough context to distinguish good and bad behavior;
+- avoids requiring exact prose when several responses could be good;
+- uses deterministic assertions only for observable structure;
+- states the semantic review target explicitly;
+- includes adversarial cases where a simplistic “be brief” implementation would fail.
+
+For behavior changes, the regression case is part of the feature.
