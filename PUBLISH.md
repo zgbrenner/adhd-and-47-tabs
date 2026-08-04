@@ -1,59 +1,71 @@
-# Publishing
+# Publishing and release process
 
-This repository intentionally uses no GitHub Actions or hosted CI. Validation, packaging, and release preparation run locally.
+Releases are prepared and verified locally. GitHub Actions and hosted CI are intentionally not used.
 
-## One-time setup
+## Release contract
 
-Install Python 3, Git, Make, and GitHub CLI, then authenticate:
+A release is ready only when:
 
-```bash
-gh auth login
-make install-hooks
-```
+1. `VERSION`, `SKILL.md`, the evaluation suite, citation, changelog, and release notes agree.
+2. `make check` passes.
+3. `make release` passes.
+4. The tracked ZIP is byte-for-byte reproducible from the source skill folder.
+5. `dist/SHA256SUMS` matches the tracked ZIP.
+6. The exact pull-request head is reviewed and merged.
+7. The release tag points to the verified merged main commit.
+8. The exact tracked ZIP and checksum are attached to the GitHub Release.
 
-## Validate a change
+## Prepare
 
 ```bash
 make check
-gh skill publish --dry-run
-```
-
-`make check` validates the source, deterministically rebuilds `dist/adhd-and-47-tabs.zip` and `dist/SHA256SUMS`, and runs the repository contract checks. These two generated files are intentionally tracked so the repository always exposes a working verified download. Do not edit them manually.
-
-After `make check`, confirm the tracked package files are unchanged or include their regenerated versions in the same pull request as the source change.
-
-## Push source changes
-
-After the checks pass, use your normal reviewed Git workflow:
-
-```bash
-git add --all
-git commit -m "describe the change"
-git push
-```
-
-The repository does not include a script that commits, tags, or pushes automatically. That prevents a stale repository constant from publishing to the wrong destination.
-
-## Prepare a release
-
-1. Update `VERSION`, `adhd-and-47-tabs/SKILL.md`, `CITATION.cff`, `CHANGELOG.md`, and `docs/releases/<version>.md`.
-2. Run `make check` and `gh skill publish --dry-run`.
-3. Commit the regenerated ZIP and checksum with the source changes, then merge them to `main`.
-4. From a clean checkout of `main`, run:
-
-```bash
 make release
 ```
 
-This re-verifies the canonical package and checksum and identifies the matching release-notes file. A GitHub Release may mirror those exact tracked assets, but the repository download remains authoritative even when release publishing is unavailable.
+`make release` runs validation, deterministic packaging, repository tests, scorer tests, checksum verification, and release-note checks.
 
-## Manual commands
+## Review
+
+Inspect the complete diff for:
+
+- unsupported medical claims;
+- copied prose;
+- contradictory routing rules;
+- excessive rigidity;
+- stale versions or package names;
+- missing attribution;
+- hidden dependencies, credentials, or telemetry;
+- GitHub Actions or remote publishing scripts;
+- package drift;
+- optional polish turned into a release requirement.
+
+## Merge
+
+Merge only the reviewed head SHA. After merge, verify on `main`:
 
 ```bash
-python3 scripts/validate_skill.py
-python3 scripts/build_zip.py
+cat VERSION
+sha256sum -c dist/SHA256SUMS
 python3 scripts/test_repository.py
-python3 scripts/score_responses.py --responses responses.jsonl
-python3 scripts/prepare_release.py
-gh skill publish --dry-run
 ```
+
+## GitHub Release
+
+Create tag and release `v3.0.0` from the verified merged commit.
+
+Use `docs/releases/3.0.0.md` as the release body. Attach:
+
+- `dist/adhd-and-47-tabs.zip`
+- `dist/SHA256SUMS`
+
+Mark the release as the latest non-prerelease.
+
+## Verify publication
+
+- Tag resolves to the merged main commit.
+- Both assets exist.
+- Downloaded ZIP matches the published checksum.
+- The repository's canonical raw ZIP matches the attached asset.
+- Installation succeeds from the release asset, not a local untracked build.
+
+Do not publish from an unmerged feature branch or a locally modified worktree.

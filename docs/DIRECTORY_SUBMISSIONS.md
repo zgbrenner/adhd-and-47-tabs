@@ -1,32 +1,46 @@
-# Directory submission kit
+# Directory submission information
 
-Use the canonical skill URL when a directory accepts a deep link:
+## Name
 
-`https://github.com/zgbrenner/adhd-and-47-tabs/tree/main/adhd-and-47-tabs`
+ADHD & 47 Tabs
 
-Use this canonical package URL when a directory accepts a direct download:
+## Slug
 
-`https://github.com/zgbrenner/adhd-and-47-tabs/raw/main/dist/adhd-and-47-tabs.zip`
+`adhd-and-47-tabs`
 
-## Listing copy
+## Version
 
-**Name:** ADHD & 47 Tabs
+`3.0.0`
 
-**Short description:** Cross-platform Agent Skill that lowers cognitive load by putting answers and finished outputs first, limiting the active working set, preserving project state, and avoiding unnecessary next steps.
+## Summary
 
-**Category:** Productivity and accessibility
+An adaptive, cross-platform Agent Skill that puts the useful answer or action first, keeps a small visible working set, restores context after interruption, reuses known constraints, resets repeated-failure loops, and protects the definition of done without removing necessary depth.
 
-**Tags:** ADHD, productivity, accessibility, executive function, focus, writing, research, planning, ChatGPT, Claude, Codex, GitHub Copilot
+## Categories
 
-**License:** MIT
+- Accessibility
+- Productivity
+- Writing
+- Planning
+- Research
+- Education
+- Developer tools
+- Agent Skills
 
-**Platforms:** Claude, ChatGPT, Codex, GitHub Copilot, and Agent Skills compatible systems
+## Compatibility
 
-## Verification checklist
+Claude, ChatGPT Skills, Codex, GitHub Copilot, and compatible Agent Skills hosts.
 
-- Submit the canonical repository or skill URL.
-- Use the tracked repository package as the authoritative download; a GitHub Release may mirror the same bytes.
-- Confirm the listing uses `adhd-and-47-tabs.zip` and not the retired v1 package name.
-- Confirm the listing displays upstream attribution and the MIT license.
-- Re-submit or refresh the listing after each version change.
-- Test every directory URL immediately before submission because directory forms and requirements change.
+## Package
+
+Canonical ZIP: `dist/adhd-and-47-tabs.zip`
+
+Checksum: `dist/SHA256SUMS`
+
+## Privacy and security
+
+No executable code, external dependencies, network access, credentials, telemetry, tracking, or background processes.
+
+## License and attribution
+
+MIT. Original skill by Ayoub Ghriss; cross-platform adaptation by Zachary Brenner.

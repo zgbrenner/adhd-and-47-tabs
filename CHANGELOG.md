@@ -1,53 +1,52 @@
 # Changelog
 
-All notable changes are documented here.
+All notable changes to ADHD & 47 Tabs are documented here.
 
-## 2.0.0 — 2026-07-31
+## [3.0.0] — 2026-08-04
 
-### Breaking change
+### Added
 
-- Renamed the canonical skill folder and package from `i-have-adhd-and-47-tabs` to `adhd-and-47-tabs` so the repository, skill name, install path, package asset, and product identity match.
-- Existing installations should remove or disable the v1 skill before installing v2 to avoid loading both copies.
+- Six adaptive modifiers: Friction, Reorientation, Memory offload, Decision, Recovery, and Finish.
+- A compact `You are here: goal → verified state → next action` interruption-recovery breadcrumb.
+- Active, Ready, Blocked, and Parked working-set semantics.
+- Conversation controls: `one thing`, `map it`, `resume`, `park that`, `more detail`, `less detail`, `why this`, and stop mode.
+- Reuse of reliable conversation details at the point of action.
+- A repeated-failure circuit breaker that separates known evidence, the likely wrong assumption, and one diagnostic.
+- Finish-line scope protection and observable definitions of done.
+- Explicit handling of reversible defaults, irreversible actions, false urgency, optional timeboxes, and user-provided recovery time.
+- Focused interaction-pattern and quick-reference documents.
+- A schema-v2 provider-neutral evaluation format with single-turn and multi-turn cases.
+- Text, JSON, and Markdown evaluation reports with category summaries.
+- Structural assertions for generic closers, headings, questions, bullets, total list items, ordered content, and first-line patterns.
+- A detailed open-source and accessibility research ledger.
 
-### Skill behavior
+### Changed
 
-- Rebuilt the skill around four explicit response contracts: answer, action, artifact, and project update.
-- Changed the optimization target from raw brevity to lower cognitive load, preserving necessary detail, citations, warmth, uncertainty, and safety guidance.
-- Stopped forcing a `Next:` action after complete factual answers and finished deliverables.
-- Added progressive disclosure, bounded active work, definitions of done, ranked alternatives, evidence-based progress updates, and sequential troubleshooting.
-- Added explicit exceptions for high-stakes questions, emotional support, creative work, requested depth, ambiguity, and irreversible actions.
-- Expanded examples to cover research, studying, writing, planning, code, troubleshooting, legal and financial questions, emotional support, creative work, and long requested artifacts.
+- Expanded the regression suite from 12 to 47 cases across 15 categories.
+- Reworked examples from 12 basic scenarios to 32 interaction and edge-case examples.
+- Hardened deterministic ZIP generation with fixed timestamps, permissions, entry order, atomic writes, and byte-level source verification.
+- Strengthened local validation for behavior signals, controls, progressive disclosure, multi-turn coverage, research attribution, and canonical version surfaces.
+- Updated installation guidance for current Claude, ChatGPT, Codex, and GitHub Copilot skill workflows.
+- Clarified that active-work limits never truncate requested artifacts or necessary high-stakes detail.
 
-### Quality and packaging
+### Preserved
 
-- Added a portable behavior-evaluation suite with cross-platform scenarios and a dependency-free JSONL response scorer.
-- Added executable scorer regression tests for passing, failing, and malformed response exports.
-- Strengthened validation for Agent Skills metadata, synchronized versioning, referenced files, behavior requirements, evaluation coverage, duplicate JSON keys, stale identity strings, and loading-budget limits.
-- Switched to a compressed, deterministic ZIP with one canonical top-level folder.
-- Added automatic SHA-256 generation and verification.
-- Track only the canonical `dist/adhd-and-47-tabs.zip` and `dist/SHA256SUMS` so a working verified download is always available from the repository.
-- Replaced automatic repository and release publishing scripts with explicit reviewed Git operations and local release preparation.
-- Updated installation, support, security, contribution, directory-submission, citation, publishing, and Custom GPT documentation.
-- Preserved local-only validation with no GitHub Actions, hosted CI, paid services, API keys, or third-party Python packages.
+- Canonical slug and package: `adhd-and-47-tabs`.
+- Four base contracts: Answer, Action, Artifact, and Project update.
+- MIT license and upstream attribution.
+- No hosted CI, GitHub Actions, API keys, executable skill code, telemetry, or third-party Python dependencies.
 
-## 1.1.0 — 2026-07-22
+## [2.0.0] — 2026-07-31
 
-- Improved the skill description so it states both the behavior and realistic trigger signals.
-- Replaced self-referential packaging examples with general-purpose error handling examples.
-- Removed undocumented OpenAI metadata and the redundant root-level ZIP copy.
-- Added package freshness checks, broader Python coverage, safer publishing, and stray-file filtering.
-- Standardized repository commands on `python3`.
-- Added stable GitHub Release assets with SHA-256 verification.
-- Added Codex, GitHub Copilot, and universal Skills CLI installation paths.
-- Added structured issue and discussion forms, support routing, and starter community discussions.
-- Expanded contribution guidance, adopted Contributor Covenant 2.1, and strengthened security reporting.
-- Added a share-ready social preview and directory submission kit.
+- Introduced the four response contracts.
+- Reframed the goal as lower cognitive load rather than minimum word count.
+- Added progressive disclosure, ranked choices, bounded steps, definitions of done, project-state restoration, and explicit exceptions.
+- Added 12 provider-neutral scenarios, a local structural scorer, deterministic packaging, and canonical identity cleanup.
 
-## 1.0.0 — 2026-07-21
+## [1.1.0] — 2026-07-22
 
-- Renamed the adaptation to **I Have ADHD and 47 Tabs**.
-- Generalized the skill for research, school, writing, planning, administration, everyday questions, and technical work.
-- Added Claude custom-skill and ChatGPT Skill packaging.
-- Added a Custom GPT fallback.
-- Added explicit attribution to Ayoub Ghriss and the upstream project.
-- Added validation, reproducible ZIP packaging, tests, CI, and contribution documentation.
+- Expanded the upstream concept for cross-platform knowledge work, planning, administrative tasks, and technical work.
+
+## [1.0.0] — 2026-07-22
+
+- Initial cross-platform adaptation of `ayghri/i-have-adhd`.
