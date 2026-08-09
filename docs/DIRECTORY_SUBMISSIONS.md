@@ -10,7 +10,7 @@ ADHD & 47 Tabs
 
 ## Version
 
-`3.0.0`
+`1.1.0`
 
 ## Summary
 
@@ -44,3 +44,13 @@ No executable code, external dependencies, network access, credentials, telemetr
 ## License and attribution
 
 MIT. Original skill by Ayoub Ghriss; cross-platform adaptation by Zachary Brenner.
+
+## Live listings
+
+- Awesome Skills Directory: https://www.awesomeskills.dev/en/skill/adhd-and-47-tabs
+- AgentSkill.sh: https://agentskill.sh/skill/adhd-and-47-tabs
+- AgenticSkills: https://agenticskills.io/skill/adhd-and-47-tabs
+- Skills Directory: https://www.skillsdirectory.com/skill/adhd-and-47-tabs
+- Claude Skills Directory: https://claude.ai/skills (endpoint unavailable, pending retry)
+
+All listings preserve upstream attribution to Ayoub Ghriss and retain the MIT license.
