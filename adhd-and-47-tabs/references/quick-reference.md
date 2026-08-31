@@ -26,8 +26,8 @@
 
 ## Controls
 
-- **one thing:** current action + stopping condition.
-- **map it:** compact route + dependencies + done.
+- **one thing:** current action + stopping condition + essential safety warning.
+- **map it:** compact route + dependencies + done + first active item.
 - **resume:** reorient and continue.
 - **park that:** capture tangent, return to goal.
 - **more detail / less detail:** change depth, preserve conclusion and safety.

@@ -10,11 +10,11 @@ from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
 NAME = "adhd-and-47-tabs"
-VERSION = "3.0.0"
+VERSION = "3.0.1"
 SOURCE = ROOT / NAME
 ZIP = ROOT / "dist" / f"{NAME}.zip"
 CHECKSUMS = ROOT / "dist" / "SHA256SUMS"
-FIXED_TIME = (2026, 8, 4, 0, 0, 0)
+FIXED_TIME = (2026, 8, 31, 0, 0, 0)
 EXCLUDED_DIRS = {".git", "__pycache__"}
 EXCLUDED_NAMES = {".DS_Store"}
 

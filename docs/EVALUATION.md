@@ -12,7 +12,7 @@ ADHD & 47 Tabs uses a 47-case provider-neutral, local-first regression suite, in
   "suite": {
     "name": "ADHD & 47 Tabs",
     "slug": "adhd-and-47-tabs",
-    "version": "3.0.0"
+    "version": "3.0.1"
   },
   "cases": []
 }

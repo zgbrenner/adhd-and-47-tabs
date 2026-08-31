@@ -1,0 +1,3 @@
+# Keep checked-in bytes identical on every platform so the packaged ZIP
+# rebuilds deterministically; no end-of-line conversion.
+* -text

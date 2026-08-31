@@ -30,8 +30,9 @@ GENERIC_CLOSERS = re.compile(
     """
 )
 NEXT_STEP = re.compile(
-    r"(?im)^\s*(?:[-*>]\s*)?(?:\*\*)?next(?:\s+(?:step|active step))?(?:\*\*)?\s*:"
+    r"(?im)^\s*(?:#{1,6}\s*)?(?:[-*>]\s*)?(?:\*\*)?next(?:\s+(?:steps?|active\s+steps?))?(?:\*\*)?\s*:"
 )
+CODE_FENCE = re.compile(r"(?ms)^[ \t]*(```|~~~).*?(?:^[ \t]*\1[ \t]*$|\Z)")
 NUMBERED_STEP = re.compile(r"(?m)^\s*\d+[.)]\s+\S")
 BULLET_ITEM = re.compile(r"(?m)^\s*[-*+]\s+\S")
 MARKDOWN_HEADING = re.compile(r"(?m)^\s{0,3}#{1,6}\s+(.+?)\s*#*\s*$")
@@ -323,12 +324,15 @@ def first_content_line(response: str) -> str:
     return ""
 
 
-def last_content_line(response: str) -> str:
-    for line in reversed(response.splitlines()):
-        cleaned = line.strip()
-        if cleaned:
-            return cleaned
-    return ""
+def last_content_lines(response: str, count: int = 2) -> list[str]:
+    lines = [line.strip() for line in response.splitlines() if line.strip()]
+    return lines[-count:]
+
+
+def strip_code_fences(response: str) -> str:
+    # Fenced code blocks routinely contain #, -, *, and 1. lines that are not
+    # response structure; remove them before counting structural markers.
+    return CODE_FENCE.sub("", response)
 
 
 def word_count(response: str) -> int:
@@ -365,24 +369,28 @@ def evaluate_case(case: dict[str, Any], response: str) -> list[str]:
     expectations = case["expectations"]
     failures: list[str] = []
 
+    response = response.replace("\r\n", "\n").replace("\r", "\n")
     lowered = response.casefold()
     first_line_raw = first_content_line(response)
     first_line = first_line_raw.casefold()
-    last_line = last_content_line(response)
-    numbered_steps = len(NUMBERED_STEP.findall(response))
-    bullet_items = len(BULLET_ITEM.findall(response))
+    last_lines = last_content_lines(response)
+    structure_text = strip_code_fences(response)
+    numbered_steps = len(NUMBERED_STEP.findall(structure_text))
+    bullet_items = len(BULLET_ITEM.findall(structure_text))
     total_items = numbered_steps + bullet_items
-    headings = heading_texts(response)
+    headings = heading_texts(structure_text)
     words = word_count(response)
     questions = question_count(response)
     paragraphs = paragraph_count(response)
 
     if expectations.get("forbid_generic_opener") and GENERIC_OPENERS.search(response):
         failures.append("starts with a generic preamble")
-    if expectations.get("forbid_generic_closer") and GENERIC_CLOSERS.search(last_line):
+    if expectations.get("forbid_generic_closer") and any(
+        GENERIC_CLOSERS.search(line) for line in last_lines
+    ):
         failures.append("ends with a generic closer")
 
-    has_next_step = bool(NEXT_STEP.search(response))
+    has_next_step = bool(NEXT_STEP.search(structure_text))
     if expectations.get("require_next_step") and not has_next_step:
         failures.append("missing an explicit Next: line")
     if expectations.get("forbid_next_step") and has_next_step:
@@ -461,13 +469,14 @@ def evaluate_case(case: dict[str, Any], response: str) -> list[str]:
                 failures.append(f"matches forbidden regex: {pattern!r}")
 
     if "required_ordered_substrings" in expectations:
-        cursor = -1
+        cursor = 0
         for item in expectations["required_ordered_substrings"]:
-            position = lowered.find(item.casefold(), cursor + 1)
+            needle = item.casefold()
+            position = lowered.find(needle, cursor)
             if position < 0:
                 failures.append(f"missing ordered text after position {cursor}: {item!r}")
                 break
-            cursor = position
+            cursor = position + len(needle)
 
     if "required_any_headings" in expectations:
         lowered_headings = [heading.casefold() for heading in headings]

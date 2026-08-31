@@ -9,7 +9,8 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 NAME = "adhd-and-47-tabs"
-VERSION = "3.0.0"
+VERSION = "3.0.1"
+RELEASE_DATE = "2026-08-31"
 SKILL_DIR = ROOT / NAME
 SKILL = SKILL_DIR / "SKILL.md"
 VERSION_FILE = ROOT / "VERSION"
@@ -278,8 +279,8 @@ def main() -> None:
     if missing_categories:
         fail(f"evaluation suite is missing categories: {', '.join(missing_categories)}")
     multi_turn = sum(1 for case in cases if "conversation" in case)
-    if multi_turn < 8:
-        fail("evaluation suite must contain at least 8 multi-turn cases")
+    if multi_turn < 9:
+        fail("evaluation suite must contain at least 9 multi-turn cases")
     if len({case["id"] for case in cases}) != len(cases):
         fail("evaluation ids are not unique")
 
@@ -312,14 +313,14 @@ def main() -> None:
     citation = (ROOT / "CITATION.cff").read_text(encoding="utf-8")
     if f"version: {version}" not in citation and f'version: "{version}"' not in citation:
         fail("CITATION.cff version must match VERSION")
-    if "date-released: 2026-08-04" not in citation:
-        fail("CITATION.cff release date must be 2026-08-04")
+    if f"date-released: {RELEASE_DATE}" not in citation:
+        fail(f"CITATION.cff release date must be {RELEASE_DATE}")
 
     release_notes = (ROOT / "docs" / "releases" / f"{version}.md").read_text(
         encoding="utf-8"
     )
     if f"v{version}" not in release_notes:
-        fail("release notes must identify v3.0.0")
+        fail(f"release notes must identify v{version}")
 
     canonical_surfaces = [
         ROOT / "README.md",
@@ -331,9 +332,12 @@ def main() -> None:
         ROOT / "SUPPORT.md",
         ROOT / "chatgpt-custom-gpt" / "INSTRUCTIONS.md",
         ROOT / "docs" / "DIRECTORY_SUBMISSIONS.md",
+        ROOT / "docs" / "INSTALL.md",
         ROOT / "scripts" / "build_zip.py",
         ROOT / "scripts" / "test_repository.py",
         ROOT / "scripts" / "prepare_release.py",
+        ROOT / "scripts" / "install_git_hooks.sh",
+        ROOT / ".githooks" / "pre-push",
         SKILL,
         SKILL_DIR / "README.md",
     ]
