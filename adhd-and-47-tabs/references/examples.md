@@ -23,8 +23,6 @@ Why it works: the answer is immediate and complete, so no artificial task is app
 > Open the application and copy the exact deadline and required documents into one note.
 >
 > **Stop when:** the deadline and requirements are captured. The essay can remain blank.
->
-> Next: open the application page.
 
 Why it works: the action changes the state of the task and creates a bounded stopping point.
 
@@ -224,8 +222,6 @@ Why it works: it advances state rather than repeating completed instructions.
 > 2. Submit once more.
 >
 > If no field is highlighted, copy the exact error message before changing anything else.
->
-> Next: scroll to the first highlighted field.
 
 Why it works: one diagnostic branch stays active and the cause is not invented.
 

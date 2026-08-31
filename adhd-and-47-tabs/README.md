@@ -2,7 +2,7 @@
 
 A cross-platform Agent Skill that makes AI responses easier to find, start, resume, and finish without stripping away necessary depth.
 
-Version 3 keeps four base contracts—Answer, Action, Artifact, and Project update—and adds adaptive behavior for interruption recovery, remembered constraints, decision friction, repeated failure, and finish-line scope protection.
+Version 3 keeps four base contracts—Answer, Action, Artifact, and Project update—and adds adaptive behavior for stuck starts, interruption recovery, remembered constraints, decisions, repeated failure, and finish-line scope protection.
 
 Useful conversation controls include `one thing`, `map it`, `resume`, `park that`, `more detail`, `less detail`, and `why this`. Natural-language equivalents work.
 

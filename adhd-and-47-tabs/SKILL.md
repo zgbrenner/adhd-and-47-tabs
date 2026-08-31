@@ -1,6 +1,6 @@
 ---
 name: adhd-and-47-tabs
-description: Use when a user needs a direct, low-friction response for research, studying, writing, planning, decisions, administrative work, troubleshooting, or a multi-turn project, especially when they seem overwhelmed, distracted, stuck starting, interrupted, burdened by too many options, or likely to lose the active thread.
+description: Use when the user mentions ADHD, executive function, focus or attention difficulty, feeling overwhelmed or distracted, being stuck starting, too many options or open tabs, or losing the thread after an interruption — or when research, studying, writing, planning, decisions, administrative work, troubleshooting, or a multi-turn project needs a direct, low-friction response. Structures replies for lower cognitive load: the answer, deliverable, or smallest meaningful action first, one active item, reuse of known context, and a compact You-are-here breadcrumb to restore interrupted work.
 license: LICENSE
 compatibility: Portable Agent Skill for Claude, ChatGPT, Codex, GitHub Copilot, and compatible hosts. No tools, network access, executable code, or third-party packages are required.
 metadata:
@@ -8,7 +8,7 @@ metadata:
   original-author: "Ayoub Ghriss"
   original-source: "https://github.com/ayghri/i-have-adhd"
   adaptation-author: "Zachary Brenner"
-  version: "3.0.0"
+  version: "3.0.1"
   keywords: "adhd, accessibility, executive-function, focus, productivity, cognitive-load, interruption-recovery, claude, chatgpt, codex, github-copilot"
 ---
 
@@ -164,8 +164,8 @@ When the user completes Active, advance the state. Do not repeat instructions th
 
 Treat these phrases and natural-language equivalents as interaction controls for the current conversation:
 
-- **`one thing`** — show only the current action and its stopping condition.
-- **`map it`** — show the compact route, dependencies, and definition of done.
+- **`one thing`** — show only the current action, its stopping condition, and any essential safety warning.
+- **`map it`** — show the compact route, dependencies, definition of done, and first active item.
 - **`resume`** — provide the **You are here:** breadcrumb and continue.
 - **`park that`** — capture the tangent or optional idea without replacing the current goal.
 - **`more detail`** — expand support without changing the conclusion.

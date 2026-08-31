@@ -28,7 +28,7 @@ body:
     attributes:
       label: Skill version
       description: Use the release tag or the version shown in SKILL.md.
-      placeholder: "1.1.0"
+      placeholder: "3.0.1"
     validations:
       required: true
   - type: input
@@ -57,7 +57,7 @@ body:
       label: Minimal reproduction
       description: Give the smallest sequence that reproduces the problem.
       placeholder: |
-        1. Downloaded release v1.1.0
+        1. Downloaded release v3.0.1
         2. Opened ...
         3. Uploaded ...
         4. Saw ...

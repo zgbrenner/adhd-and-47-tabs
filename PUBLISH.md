@@ -45,15 +45,15 @@ Merge only the reviewed head SHA. After merge, verify on `main`:
 
 ```bash
 cat VERSION
-sha256sum -c dist/SHA256SUMS
+(cd dist && sha256sum -c SHA256SUMS)
 python3 scripts/test_repository.py
 ```
 
 ## GitHub Release
 
-Create tag and release `v3.0.0` from the verified merged commit.
+Create tag and release `v<VERSION>` (currently `v3.0.1`) from the verified merged commit.
 
-Use `docs/releases/3.0.0.md` as the release body. Attach:
+Use `docs/releases/<VERSION>.md` as the release body. Attach:
 
 - `dist/adhd-and-47-tabs.zip`
 - `dist/SHA256SUMS`

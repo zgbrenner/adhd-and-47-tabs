@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "suite": {"name":"ADHD & 47 Tabs","slug":"adhd-and-47-tabs","version":"3.0.0","description":"Provider-neutral structural and human-review cases for adaptive cognitive-load response design."},
+  "suite": {"name":"ADHD & 47 Tabs","slug":"adhd-and-47-tabs","version":"3.0.1","description":"Provider-neutral structural and human-review cases for adaptive cognitive-load response design."},
   "cases": [
     {"id":"direct-fact","category":"answer","tags":["complete-answer","no-forced-next"],"prompt":"What is the capital of France?","expectations":{"forbid_generic_opener":true,"forbid_generic_closer":true,"forbid_next_step":true,"required_substrings":["Paris"],"max_words":80,"max_questions":0},"review_focus":["The answer appears immediately.","No artificial task or closing offer is appended."]},
     {"id":"rank-options","category":"decision","tags":["recommendation","bounded-choices"],"prompt":"Compare three note-taking apps for a small team and recommend one.","expectations":{"forbid_generic_opener":true,"max_numbered_steps":3,"max_total_list_items":4,"required_any_substrings":["best","recommend","start with","pick"],"max_questions":1},"review_focus":["One option is clearly recommended.","The deciding criterion and change condition are stated."]},

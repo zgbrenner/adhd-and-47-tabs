@@ -5,7 +5,7 @@
 > Your brain has enough tabs open. Your AI does not need to add twelve more.
 
 [![Download](https://img.shields.io/badge/download-adhd--and--47--tabs.zip-6f42c1.svg)](https://github.com/zgbrenner/adhd-and-47-tabs/raw/main/dist/adhd-and-47-tabs.zip)
-[![Version](https://img.shields.io/badge/version-3.0.0-1f6feb.svg)](VERSION)
+[![Version](https://img.shields.io/badge/version-3.0.1-1f6feb.svg)](VERSION)
 [![Evaluation](https://img.shields.io/badge/evals-47%20cases-2ea44f.svg)](evals/cases.json)
 [![MIT License](https://img.shields.io/badge/license-MIT-2ea44f.svg)](LICENSE)
 
@@ -58,7 +58,7 @@ Natural language works, but these short phrases are convenient:
 | `park that` | Capture the tangent without replacing the current goal |
 | `more detail` / `less detail` | Change depth without losing the conclusion or safety |
 | `why this` | Explain the deciding reason |
-| `normal mode` / `stop 47-tabs mode` | Disable the defaults until asked to resume |
+| `normal mode` / `stop 47-tabs mode` / `stop ADHD mode` | Disable the defaults until asked to resume |
 
 ## Download and verify
 
@@ -67,7 +67,7 @@ Download the canonical [`adhd-and-47-tabs.zip`](https://github.com/zgbrenner/adh
 Verify it against [`dist/SHA256SUMS`](dist/SHA256SUMS):
 
 ```bash
-sha256sum -c dist/SHA256SUMS
+(cd dist && sha256sum -c SHA256SUMS)
 ```
 
 The ZIP is rebuilt deterministically from the source folder during `make check`. It contains Markdown instructions and references, one YAML host-metadata file, and the MIT license—no executable code, packages, credentials, telemetry, or network instructions.
@@ -136,7 +136,7 @@ This is a third-party CLI. Its documentation says anonymous skill-usage telemetr
 
 ## Upgrade from v2
 
-The slug is unchanged. Replace the installed ZIP or skill folder with v3.0.0, then restart or reload the host if it caches skills.
+The slug is unchanged. Replace the installed ZIP or skill folder with the latest v3 release, then restart or reload the host if it caches skills.
 
 Version 3 changes behavior and the repository evaluation schema, not the package identity. Version 1 used the retired slug `i-have-adhd-and-47-tabs`; remove that copy so two versions do not load together.
 

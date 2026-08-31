@@ -43,7 +43,10 @@ class ScoreResponsesTests(unittest.TestCase):
         self.assertEqual(suite["schema_version"], 2)
         self.assertGreaterEqual(len(suite["cases"]), 47)
         self.assertTrue(any("conversation" in case for case in suite["cases"]))
-        self.assertEqual(suite["suite"]["version"], "3.0.0")
+        self.assertEqual(
+            suite["suite"]["version"],
+            (ROOT / "VERSION").read_text(encoding="utf-8").strip(),
+        )
 
     def test_passing_response_exercises_new_assertions(self) -> None:
         case = suite_with(
@@ -145,6 +148,51 @@ class ScoreResponsesTests(unittest.TestCase):
             "First.\n\nSecond.\n\nThird.\n\nFourth.",
         )
         self.assertTrue(any("paragraphs; maximum is 3" in failure for failure in too_long))
+
+    def test_next_step_detection_covers_plural_and_heading_forms(self) -> None:
+        case = suite_with({"forbid_next_step": True})
+        for phrasing in (
+            "Done.\n\nNext: review the draft.",
+            "Done.\n\nNext steps: review the draft.",
+            "Done.\n\n## Next: review the draft.",
+            "Done.\n\n**Next step:** review the draft.",
+        ):
+            failures = score_responses.evaluate_case(case["cases"][0], phrasing)
+            self.assertTrue(
+                any("forced Next" in failure for failure in failures), phrasing
+            )
+
+    def test_crlf_responses_count_paragraphs_correctly(self) -> None:
+        case = suite_with({"min_paragraphs": 3, "max_paragraphs": 3})
+        failures = score_responses.evaluate_case(
+            case["cases"][0], "First.\r\n\r\nSecond.\r\n\r\nThird."
+        )
+        self.assertEqual(failures, [])
+
+    def test_fenced_code_is_excluded_from_structure_counts(self) -> None:
+        case = suite_with(
+            {"max_headings": 0, "max_numbered_steps": 0, "max_bullet_items": 0}
+        )
+        response = (
+            "Run the script below.\n\n"
+            "```bash\n# comment heading\n1. not a step\n- not a bullet\n```\n"
+        )
+        failures = score_responses.evaluate_case(case["cases"][0], response)
+        self.assertEqual(failures, [])
+
+    def test_ordered_substrings_do_not_overlap(self) -> None:
+        case = suite_with({"required_ordered_substrings": ["step 1", "1"]})
+        failures = score_responses.evaluate_case(case["cases"][0], "step 1 only")
+        self.assertTrue(any("ordered text" in failure for failure in failures))
+        passing = score_responses.evaluate_case(case["cases"][0], "step 1, then 1")
+        self.assertEqual(passing, [])
+
+    def test_generic_closer_is_caught_before_a_trailing_note(self) -> None:
+        case = suite_with({"forbid_generic_closer": True})
+        failures = score_responses.evaluate_case(
+            case["cases"][0], "Paris.\n\nHope this helps!\n\n(see the docs)"
+        )
+        self.assertTrue(any("generic closer" in failure for failure in failures))
 
     def test_unknown_expectation_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
