@@ -1,0 +1,15 @@
+{
+  "name": "ADHD & 47 Tabs",
+  "short_name": "47 Tabs",
+  "description": "An open-source Agent Skill that puts the answer, deliverable, or next action first.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#F4F6F9",
+  "theme_color": "#1E3AE0",
+  "icons": [
+    { "src": "favicon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" },
+    { "src": "assets/icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "assets/icon-512.png", "type": "image/png", "sizes": "512x512" }
+  ]
+}
