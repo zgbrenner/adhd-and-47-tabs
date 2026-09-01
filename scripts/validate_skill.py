@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 NAME = "adhd-and-47-tabs"
 VERSION = "3.0.1"
 RELEASE_DATE = "2026-08-31"
+SITE_URL = "https://zgbrenner.github.io/adhd-and-47-tabs/"
 SKILL_DIR = ROOT / NAME
 SKILL = SKILL_DIR / "SKILL.md"
 VERSION_FILE = ROOT / "VERSION"
@@ -182,6 +183,9 @@ def main() -> None:
         ROOT / "scripts" / "test_validate_skill.py",
         ROOT / "scripts" / "prepare_release.py",
         ROOT / "dist" / ".gitkeep",
+        ROOT / "index.html",
+        ROOT / "robots.txt",
+        ROOT / "sitemap.xml",
     ]
     for path in required_files:
         require_file(path)
@@ -338,6 +342,7 @@ def main() -> None:
         ROOT / "scripts" / "prepare_release.py",
         ROOT / "scripts" / "install_git_hooks.sh",
         ROOT / ".githooks" / "pre-push",
+        ROOT / "index.html",
         SKILL,
         SKILL_DIR / "README.md",
     ]
@@ -350,6 +355,21 @@ def main() -> None:
         if old_asset in surface:
             fail(f"stale package name in {path.relative_to(ROOT)}")
         check_no_placeholders(path)
+
+    site = (ROOT / "index.html").read_text(encoding="utf-8")
+    if version not in site:
+        fail(f"index.html must state the current version {version}")
+    if f'"softwareVersion": "{version}"' not in site:
+        fail("index.html structured data must carry the current softwareVersion")
+    if SITE_URL not in site:
+        fail(f"index.html must set the canonical site URL {SITE_URL}")
+    for required_tag in ('rel="canonical"', 'property="og:image"', 'application/ld+json'):
+        if required_tag not in site:
+            fail(f"index.html is missing required metadata: {required_tag}")
+    if SITE_URL not in (ROOT / "sitemap.xml").read_text(encoding="utf-8"):
+        fail(f"sitemap.xml must list {SITE_URL}")
+    if SITE_URL not in (ROOT / "robots.txt").read_text(encoding="utf-8"):
+        fail("robots.txt must point at the sitemap")
 
     print(
         f"OK: {NAME} source package v{version} is valid "
