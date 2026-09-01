@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import re
 import sys
 from pathlib import Path, PurePosixPath
@@ -12,6 +13,7 @@ NAME = "adhd-and-47-tabs"
 VERSION = "3.0.1"
 RELEASE_DATE = "2026-08-31"
 SITE_URL = "https://zgbrenner.github.io/adhd-and-47-tabs/"
+ACCENT = "#1E3AE0"
 SKILL_DIR = ROOT / NAME
 SKILL = SKILL_DIR / "SKILL.md"
 VERSION_FILE = ROOT / "VERSION"
@@ -187,6 +189,12 @@ def main() -> None:
         ROOT / "robots.txt",
         ROOT / "sitemap.xml",
         ROOT / ".nojekyll",
+        ROOT / "favicon.svg",
+        ROOT / "favicon.ico",
+        ROOT / "apple-touch-icon.png",
+        ROOT / "site.webmanifest",
+        ROOT / "assets" / "icon-192.png",
+        ROOT / "assets" / "icon-512.png",
     ]
     for path in required_files:
         require_file(path)
@@ -364,9 +372,22 @@ def main() -> None:
         fail("index.html structured data must carry the current softwareVersion")
     if SITE_URL not in site:
         fail(f"index.html must set the canonical site URL {SITE_URL}")
-    for required_tag in ('rel="canonical"', 'property="og:image"', 'application/ld+json'):
+    for required_tag in (
+        'rel="canonical"', 'property="og:image"', 'application/ld+json',
+        'href="favicon.svg"', 'href="favicon.ico"',
+        'rel="apple-touch-icon"', 'rel="manifest"',
+    ):
         if required_tag not in site:
             fail(f"index.html is missing required metadata: {required_tag}")
+    manifest = json.loads((ROOT / "site.webmanifest").read_text(encoding="utf-8"))
+    if manifest.get("theme_color") != ACCENT:
+        fail(f"site.webmanifest theme_color must be the site accent {ACCENT}")
+    for icon in ("favicon.svg", "assets/icon-192.png", "assets/icon-512.png"):
+        if not any(entry.get("src") == icon for entry in manifest.get("icons", [])):
+            fail(f"site.webmanifest must list icon {icon}")
+    if ACCENT not in (ROOT / "favicon.svg").read_text(encoding="utf-8"):
+        fail(f"favicon.svg must use the site accent {ACCENT}")
+
     if SITE_URL not in (ROOT / "sitemap.xml").read_text(encoding="utf-8"):
         fail(f"sitemap.xml must list {SITE_URL}")
     if SITE_URL not in (ROOT / "robots.txt").read_text(encoding="utf-8"):
