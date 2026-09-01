@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADHD &amp; 47 Tabs — Agent Skill for Focused AI Answers</title>
+<meta name="description" content="An open-source Agent Skill for Claude, ChatGPT, Codex, and GitHub Copilot. Puts the answer, deliverable, or next action first, keeps one active item, and restores the thread after an interruption.">
+<link rel="canonical" href="https://zgbrenner.github.io/adhd-and-47-tabs/">
+<meta name="author" content="Zachary Brenner">
+<meta name="keywords" content="ADHD, agent skill, Claude skill, ChatGPT skill, cognitive load, executive function, accessibility, AI productivity, Codex skill, GitHub Copilot skill">
+<meta name="theme-color" content="#F4F6F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0D1015" media="(prefers-color-scheme: dark)">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ADHD &amp; 47 Tabs">
+<meta property="og:title" content="ADHD &amp; 47 Tabs — Agent Skill for Focused AI Answers">
+<meta property="og:description" content="An open-source Agent Skill for Claude, ChatGPT, Codex, and GitHub Copilot. Puts the answer or next action first, keeps one active item, and restores the thread after an interruption.">
+<meta property="og:url" content="https://zgbrenner.github.io/adhd-and-47-tabs/">
+<meta property="og:image" content="https://zgbrenner.github.io/adhd-and-47-tabs/assets/social-preview.png">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="640">
+<meta property="og:image:alt" content="ADHD &amp; 47 Tabs — an adaptive AI skill for clearer answers.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ADHD &amp; 47 Tabs — Agent Skill for Focused AI Answers">
+<meta name="twitter:description" content="Puts the answer or next action first, keeps one active item, and restores the thread after an interruption. MIT licensed.">
+<meta name="twitter:image" content="https://zgbrenner.github.io/adhd-and-47-tabs/assets/social-preview.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@110,600;110,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://zgbrenner.github.io/adhd-and-47-tabs/#skill",
+      "name": "ADHD & 47 Tabs",
+      "alternateName": "adhd-and-47-tabs",
+      "applicationCategory": "DeveloperApplication",
+      "applicationSubCategory": "Agent Skill",
+      "operatingSystem": "Any",
+      "softwareVersion": "3.0.1",
+      "datePublished": "2026-08-31",
+      "fileSize": "21215",
+      "downloadUrl": "https://github.com/zgbrenner/adhd-and-47-tabs/releases/latest/download/adhd-and-47-tabs.zip",
+      "installUrl": "https://zgbrenner.github.io/adhd-and-47-tabs/#install",
+      "url": "https://zgbrenner.github.io/adhd-and-47-tabs/",
+      "codeRepository": "https://github.com/zgbrenner/adhd-and-47-tabs",
+      "license": "https://opensource.org/licenses/MIT",
+      "description": "An open-source Agent Skill that restructures AI responses for lower cognitive load: the answer, deliverable, or smallest meaningful action first, one active item at a time, and a compact breadcrumb that restores the thread after an interruption.",
+      "keywords": "ADHD, executive function, cognitive load, accessibility, agent skill, prompt engineering",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "author": { "@id": "https://zgbrenner.github.io/adhd-and-47-tabs/#author" },
+      "isBasedOn": "https://github.com/ayghri/i-have-adhd"
+    },
+    {
+      "@type": "Person",
+      "@id": "https://zgbrenner.github.io/adhd-and-47-tabs/#author",
+      "name": "Zachary Brenner",
+      "url": "https://github.com/zgbrenner"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://zgbrenner.github.io/adhd-and-47-tabs/#website",
+      "url": "https://zgbrenner.github.io/adhd-and-47-tabs/",
+      "name": "ADHD & 47 Tabs",
+      "inLanguage": "en",
+      "about": { "@id": "https://zgbrenner.github.io/adhd-and-47-tabs/#skill" }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://zgbrenner.github.io/adhd-and-47-tabs/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is ADHD & 47 Tabs?",
+          "acceptedAnswer": { "@type": "Answer", "text": "ADHD & 47 Tabs is a free, open-source Agent Skill that changes how an AI assistant structures its replies. It puts the answer, finished deliverable, or smallest meaningful action first, keeps one item active at a time, reuses details you already gave, and restores the thread after an interruption." }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need an ADHD diagnosis to use it?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. It is a response-design skill, not a medical tool. It does not diagnose, treat, or explain your behavior, and no diagnosis is required to install or use it." }
+        },
+        {
+          "@type": "Question",
+          "name": "Which AI assistants support it?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Claude, ChatGPT, Codex, and GitHub Copilot, plus any host that follows the open Agent Skills specification. A Custom GPT instruction set is included for accounts without skill uploads." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it just make answers shorter?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. The target is lower cognitive load, not minimum word count. Detailed requests still get detailed answers, high-stakes questions keep their nuance and escalation guidance, creative work stays creative, and a requested 30-item checklist still contains all 30 items." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is it safe to install?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The package is eight files: Markdown instructions, one YAML metadata file, and the MIT license. It contains no executable code, no network calls, no credentials, no telemetry, and no third-party dependencies. Every release ships a SHA-256 checksum so you can verify the download." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I turn it off?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Say 'normal mode', 'stop 47-tabs mode', or 'stop ADHD mode'. The defaults switch off for the rest of the conversation until you ask for them back." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<style>
+:root{
+  --paper:#F4F6F9; --surface:#FFFFFF; --surface-2:#EDF0F5;
+  --ink:#10131A; --ink-2:#4A5464; --ink-3:#727D8D;
+  --rule:#DDE3EC; --rule-2:#C8D1DE;
+  --accent:#1E3AE0; --accent-ink:#FFFFFF; --accent-soft:#E7EBFD;
+  --mark:#FFE884; --mark-ink:#10131A;
+
+  --sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --display:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+
+  --measure:34rem;
+  --s1:.25rem; --s2:.5rem; --s3:.75rem; --s4:1rem; --s5:1.5rem;
+  --s6:2rem; --s7:3rem; --s8:4.5rem; --s9:6.5rem;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0D1015; --surface:#14181F; --surface-2:#1A1F28;
+    --ink:#E9ECF1; --ink-2:#9AA5B6; --ink-3:#7A8496;
+    --rule:#232936; --rule-2:#2E3644;
+    --accent:#8CA0FF; --accent-ink:#0D1015; --accent-soft:#1B2233;
+    --mark:#3F3813; --mark-ink:#FFE884;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0D1015; --surface:#14181F; --surface-2:#1A1F28;
+  --ink:#E9ECF1; --ink-2:#9AA5B6; --ink-3:#7A8496;
+  --rule:#232936; --rule-2:#2E3644;
+  --accent:#8CA0FF; --accent-ink:#0D1015; --accent-soft:#1B2233;
+  --mark:#3F3813; --mark-ink:#FFE884;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:1.0625rem;line-height:1.6;
+  font-weight:400;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.05;
+  letter-spacing:-.02em;text-wrap:balance;margin:0}
+p{margin:0}
+a{color:inherit}
+img{max-width:100%;height:auto;display:block}
+
+.skip{position:absolute;left:-9999px;top:0;background:var(--accent);color:var(--accent-ink);
+  padding:var(--s3) var(--s4);z-index:99;font:500 .875rem/1 var(--sans)}
+.skip:focus{left:var(--s4);top:var(--s4)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+
+.wrap{max-width:70rem;margin-inline:auto;padding-inline:clamp(1.25rem,5vw,3.5rem)}
+.rule-top{border-top:1px solid var(--rule)}
+
+/* ---------- masthead ---------- */
+.masthead{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--rule)}
+.masthead__in{display:flex;align-items:center;gap:var(--s5);
+  padding-block:var(--s3);min-height:3.5rem}
+.brand{font-family:var(--display);font-weight:700;font-size:1rem;letter-spacing:-.01em;
+  text-decoration:none;white-space:nowrap}
+.brand span{color:var(--accent)}
+.ver{font:500 .6875rem/1 var(--mono);color:var(--ink-2);border:1px solid var(--rule-2);
+  padding:.3rem .45rem;border-radius:3px;letter-spacing:.02em;white-space:nowrap}
+.masthead nav{margin-left:auto;display:flex;align-items:center;gap:var(--s5)}
+.masthead nav a{font-size:.9375rem;color:var(--ink-2);text-decoration:none;transition:color .15s}
+.masthead nav a:hover{color:var(--ink)}
+@media (max-width:37rem){.masthead nav a.opt{display:none}}
+
+/* ---------- hero ---------- */
+.hero{padding-block:clamp(var(--s7),9vw,var(--s9)) var(--s8)}
+.hero__grid{display:grid;gap:clamp(var(--s6),5vw,var(--s7));
+  grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);align-items:start}
+@media (max-width:56rem){.hero__grid{grid-template-columns:1fr}}
+.eyebrow{font:500 .75rem/1 var(--mono);text-transform:uppercase;letter-spacing:.11em;
+  color:var(--accent);margin-bottom:var(--s5)}
+h1{font-size:clamp(2.35rem,6.2vw,4rem)}
+h1 .quiet{color:var(--ink-2);display:block}
+.lede{margin-top:var(--s5);max-width:var(--measure);color:var(--ink-2);font-size:1.125rem;line-height:1.55}
+.lede strong{color:var(--ink);font-weight:600}
+
+.actions{display:flex;flex-wrap:wrap;gap:var(--s3);margin-top:var(--s6)}
+.btn{display:inline-flex;align-items:center;gap:.55rem;font:600 .9375rem/1 var(--sans);
+  padding:.8rem 1.15rem;border-radius:4px;text-decoration:none;border:1px solid transparent;
+  transition:background .15s,border-color .15s,color .15s}
+.btn--go{background:var(--accent);color:var(--accent-ink)}
+.btn--go:hover{background:var(--ink)}
+.btn--out{border-color:var(--rule-2);color:var(--ink)}
+.btn--out:hover{border-color:var(--ink);background:var(--surface)}
+.btn small{font:400 .75rem/1 var(--mono);opacity:.8}
+
+/* spec block */
+.spec{border:1px solid var(--rule);background:var(--surface);border-radius:5px;overflow:hidden}
+.spec__hd{font:500 .6875rem/1 var(--mono);text-transform:uppercase;letter-spacing:.1em;
+  color:var(--ink-3);padding:var(--s3) var(--s4);border-bottom:1px solid var(--rule);
+  background:var(--surface-2)}
+.spec dl{margin:0;display:grid;grid-template-columns:auto 1fr}
+.spec dt{font:400 .8125rem/1.5 var(--mono);color:var(--ink-3);padding:.6rem var(--s4);
+  border-bottom:1px solid var(--rule);white-space:nowrap}
+.spec dd{margin:0;font:500 .8125rem/1.5 var(--mono);text-align:right;padding:.6rem var(--s4);
+  border-bottom:1px solid var(--rule);font-variant-numeric:tabular-nums}
+.spec dl>:nth-last-child(-n+2){border-bottom:0}
+.spec dd.wrap-ok{text-align:right;font-weight:400;color:var(--ink-2)}
+
+/* ---------- section chrome ---------- */
+section.band{padding-block:clamp(var(--s7),7vw,var(--s8))}
+.slabel{font:500 .75rem/1 var(--mono);text-transform:uppercase;letter-spacing:.11em;
+  color:var(--ink-3);margin-bottom:var(--s4)}
+h2{font-size:clamp(1.65rem,3.4vw,2.35rem);max-width:26ch}
+.sintro{margin-top:var(--s4);max-width:var(--measure);color:var(--ink-2)}
+
+/* ---------- demo ---------- */
+.demo{display:grid;gap:var(--s4);grid-template-columns:1fr 1fr;margin-top:var(--s6)}
+@media (max-width:52rem){.demo{grid-template-columns:1fr}}
+.pane{border:1px solid var(--rule);border-radius:5px;background:var(--surface);
+  display:flex;flex-direction:column}
+.pane--good{border-color:var(--rule-2)}
+.pane__hd{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);
+  padding:var(--s3) var(--s4);border-bottom:1px solid var(--rule);
+  font:500 .6875rem/1 var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3)}
+.pane--good .pane__hd{color:var(--accent)}
+.pane__body{padding:var(--s5) var(--s4);font-size:.9375rem;line-height:1.62;flex:1}
+.pane--weak .pane__body{color:var(--ink-3)}
+.pane__body p+p{margin-top:.85rem}
+.pane__ft{border-top:1px dashed var(--rule);padding:var(--s3) var(--s4);
+  font:400 .75rem/1.5 var(--mono);color:var(--ink-3);font-variant-numeric:tabular-nums}
+.pane--good .pane__ft{color:var(--ink-2)}
+mark{background:var(--mark);color:var(--mark-ink);padding:.12em .28em;
+  border-radius:2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.prompt{font:400 .8125rem/1.6 var(--mono);color:var(--ink-2);margin-top:var(--s5);
+  padding-left:var(--s4);border-left:2px solid var(--rule-2);max-width:52rem}
+.prompt b{color:var(--ink);font-weight:500}
+
+/* ---------- routes ---------- */
+.routes{margin-top:var(--s6);border-top:1px solid var(--rule)}
+.route{display:grid;grid-template-columns:11rem 1fr;gap:var(--s5);
+  padding-block:var(--s5);border-bottom:1px solid var(--rule);align-items:baseline}
+@media (max-width:44rem){.route{grid-template-columns:1fr;gap:var(--s2)}}
+.route dt{font-family:var(--display);font-weight:700;font-size:1.0625rem;letter-spacing:-.01em}
+.route dd{margin:0;color:var(--ink-2);max-width:44ch}
+.route dd em{font-style:normal;color:var(--ink);font-weight:500}
+
+/* ---------- two-col lists ---------- */
+.cols{display:grid;gap:var(--s5) var(--s7);grid-template-columns:1fr 1fr;margin-top:var(--s6)}
+@media (max-width:46rem){.cols{grid-template-columns:1fr}}
+.mod dt{font-weight:600;font-size:.9375rem}
+.mod dd{margin:.15rem 0 0;color:var(--ink-2);font-size:.9375rem}
+
+.chips{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s5)}
+.chip{font:500 .8125rem/1 var(--mono);border:1px solid var(--rule-2);color:var(--ink-2);
+  padding:.5rem .7rem;border-radius:3px;background:var(--surface)}
+.chip b{color:var(--accent);font-weight:500}
+
+/* ---------- install ---------- */
+.hosts{display:grid;gap:var(--s5);grid-template-columns:repeat(2,1fr);margin-top:var(--s6)}
+@media (max-width:46rem){.hosts{grid-template-columns:1fr}}
+.host{border:1px solid var(--rule);border-radius:5px;background:var(--surface);
+  padding:var(--s5) var(--s4);display:flex;flex-direction:column;gap:var(--s3)}
+.host h3{font-size:1.0625rem}
+.host ol{margin:0;padding-left:1.15rem;color:var(--ink-2);font-size:.9375rem;line-height:1.55}
+.host ol li+li{margin-top:.3rem}
+.host p{color:var(--ink-2);font-size:.9375rem}
+pre{margin:0;background:var(--surface-2);border:1px solid var(--rule);border-radius:4px;
+  padding:var(--s3) var(--s4);overflow-x:auto;font:400 .8125rem/1.65 var(--mono);color:var(--ink)}
+code{font-family:var(--mono);font-size:.9em}
+p code,li code,dd code{background:var(--surface-2);border:1px solid var(--rule);
+  padding:.08em .35em;border-radius:3px;font-size:.85em}
+
+/* ---------- faq ---------- */
+.faq{display:grid;gap:var(--s6) var(--s7);grid-template-columns:1fr 1fr;margin-top:var(--s6)}
+@media (max-width:46rem){.faq{grid-template-columns:1fr;gap:var(--s5)}}
+.faq h3{font-family:var(--sans);font-weight:600;font-size:1rem;letter-spacing:0;line-height:1.4}
+.faq p{margin-top:var(--s2);color:var(--ink-2);font-size:.9375rem}
+
+/* ---------- closing ---------- */
+.close{padding-block:clamp(var(--s7),7vw,var(--s8));text-align:left}
+.close h2{max-width:20ch}
+
+footer{border-top:1px solid var(--rule);padding-block:var(--s6) var(--s7);
+  color:var(--ink-3);font-size:.875rem}
+.foot{display:flex;flex-wrap:wrap;gap:var(--s5);justify-content:space-between}
+.foot a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--rule-2)}
+.foot a:hover{color:var(--ink);border-color:var(--ink)}
+.foot ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:var(--s4)}
+.foot p{max-width:42ch;line-height:1.55}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="wrap masthead__in">
+    <a class="brand" href="/adhd-and-47-tabs/">ADHD <span>&amp;</span> 47 Tabs</a>
+    <span class="ver">v3.0.1</span>
+    <nav>
+      <a class="opt" href="#how">How it works</a>
+      <a class="opt" href="#install">Install</a>
+      <a href="https://github.com/zgbrenner/adhd-and-47-tabs">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="wrap hero">
+    <div class="hero__grid">
+      <div>
+        <p class="eyebrow">Open-source Agent Skill</p>
+        <h1>Your brain has enough tabs open. <span class="quiet">Your AI does not need to add twelve more.</span></h1>
+        <p class="lede"><strong>ADHD &amp; 47 Tabs</strong> changes how an assistant structures a reply: the answer, the finished deliverable, or the smallest action that moves the task — first. One item active. The thread restored after every interruption.</p>
+        <div class="actions">
+          <a class="btn btn--go" href="https://github.com/zgbrenner/adhd-and-47-tabs/releases/latest/download/adhd-and-47-tabs.zip">Download the skill <small>ZIP · 21 KB</small></a>
+          <a class="btn btn--out" href="https://github.com/zgbrenner/adhd-and-47-tabs">Read the source</a>
+        </div>
+      </div>
+
+      <div class="spec">
+        <p class="spec__hd">Package</p>
+        <dl>
+          <dt>Version</dt><dd>3.0.1</dd>
+          <dt>Size</dt><dd>21,215 bytes</dd>
+          <dt>Files</dt><dd>8</dd>
+          <dt>License</dt><dd>MIT</dd>
+          <dt>Contains</dt><dd class="wrap-ok">Markdown + 1 YAML</dd>
+          <dt>Executable code</dt><dd class="wrap-ok">None</dd>
+          <dt>Network calls</dt><dd class="wrap-ok">None</dd>
+          <dt>Telemetry</dt><dd class="wrap-ok">None</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap band rule-top" id="difference">
+    <p class="slabel">The difference</p>
+    <h2>Same question. Same model. Different shape.</h2>
+    <p class="prompt"><b>You:</b> I need to renew my passport before the trip but I keep putting it off.</p>
+
+    <div class="demo">
+      <article class="pane pane--weak">
+        <header class="pane__hd"><span>Without the skill</span></header>
+        <div class="pane__body">
+          <p>Great question! Renewing a passport can feel overwhelming, but you're not alone — plenty of people put this off. There are several things to consider before you begin.</p>
+          <p>First, it's worth understanding the difference between renewing by mail and applying in person, as the requirements differ in a few important ways. You'll also want to gather your documents, think about processing times, and decide whether expedited service makes sense for your travel dates.</p>
+          <p>Once you've reviewed all of that, you can determine which form applies to your situation. Let me know if you'd like me to walk you through any of these steps in more detail!</p>
+        </div>
+        <footer class="pane__ft">105 words · no action given · closes with an offer</footer>
+      </article>
+
+      <article class="pane pane--good">
+        <header class="pane__hd"><span>With the skill</span></header>
+        <div class="pane__body">
+          <p><mark>Find your passport's issue date on page 2.</mark> If it was issued in the last 15 years, when you were 16 or older, and in your current name, you can renew by mail with Form DS-82.</p>
+          <p><strong>Stop when:</strong> the issue date is written down.</p>
+          <p>If your trip is inside 6 weeks, expedited service is worth the fee — ask and I'll cover it.</p>
+        </div>
+        <footer class="pane__ft">62 words · action in sentence 1 · one stopping condition</footer>
+      </article>
+    </div>
+  </section>
+
+  <section class="wrap band rule-top" id="how">
+    <p class="slabel">Routing</p>
+    <h2>Four ways to open a response</h2>
+    <p class="sintro">Before writing, the assistant picks one contract. The opening line is decided by what you actually need, not by habit.</p>
+
+    <dl class="routes">
+      <div class="route"><dt>Answer</dt><dd>Opens with the <em>conclusion</em>, then the evidence needed to trust it. No next step is bolted onto a question that is already answered.</dd></div>
+      <div class="route"><dt>Action</dt><dd>Opens with the <em>smallest meaningful action</em> — one that changes the state of the task — plus an observable definition of done.</dd></div>
+      <div class="route"><dt>Artifact</dt><dd>Opens with the <em>finished thing</em>: the email, the code, the table, the checklist. Commentary goes after it, not in front of it.</dd></div>
+      <div class="route"><dt>Project update</dt><dd>Opens with the <em>last verified state</em> and one active next item, instead of replaying the whole history.</dd></div>
+    </dl>
+  </section>
+
+  <section class="wrap band rule-top">
+    <p class="slabel">Adaptation</p>
+    <h2>Six modifiers for the friction in the moment</h2>
+    <p class="sintro">Applied only when the situation calls for them.</p>
+
+    <dl class="cols">
+      <div class="mod"><dt>Friction</dt><dd>Shrinks the active scope when starting feels impossible, without silently deleting requirements.</dd></div>
+      <div class="mod"><dt>Reorientation</dt><dd>Rebuilds the thread after a break: <code>You are here: goal → verified state → next action.</code></dd></div>
+      <div class="mod"><dt>Memory offload</dt><dd>Reuses the dates, names, paths, and decisions you already gave instead of asking twice.</dd></div>
+      <div class="mod"><dt>Decision</dt><dd>Recommends one path and names the criterion that decided it.</dd></div>
+      <div class="mod"><dt>Recovery</dt><dd>After two failed attempts, stops guessing and runs one diagnostic that separates the explanations.</dd></div>
+      <div class="mod"><dt>Finish</dt><dd>Protects the definition of done so optional polish cannot quietly become a new requirement.</dd></div>
+    </dl>
+  </section>
+
+  <section class="wrap band rule-top">
+    <p class="slabel">Controls</p>
+    <h2>Eight phrases that steer it mid-conversation</h2>
+    <p class="sintro">Plain language works just as well — these are only the short forms.</p>
+    <div class="chips">
+      <span class="chip"><b>one thing</b> — current action only</span>
+      <span class="chip"><b>map it</b> — route, dependencies, done</span>
+      <span class="chip"><b>resume</b> — restore the thread</span>
+      <span class="chip"><b>park that</b> — capture without switching</span>
+      <span class="chip"><b>more detail</b> / <b>less detail</b></span>
+      <span class="chip"><b>why this</b> — the deciding reason</span>
+      <span class="chip"><b>normal mode</b> — switch it all off</span>
+    </div>
+    <p class="sintro" style="margin-top:var(--s5)">The working set stays small on purpose: one item <em>Active</em>, at most two <em>Ready</em>, blockers only when they affect the active path, everything else <em>Parked</em>. That limit governs the conversation, never the deliverable — a requested 30-item checklist still arrives with all 30 items.</p>
+  </section>
+
+  <section class="wrap band rule-top" id="install">
+    <p class="slabel">Install</p>
+    <h2>Four hosts, one package</h2>
+    <p class="sintro">The same ZIP works everywhere. Nothing to configure after upload.</p>
+
+    <div class="hosts">
+      <article class="host">
+        <h3>Claude</h3>
+        <ol>
+          <li>Enable <strong>Code execution and file creation</strong> in Settings → Capabilities.</li>
+          <li>Open <strong>Customize → Skills</strong>.</li>
+          <li>Choose <strong>+ → Create skill → Upload a skill</strong>, then upload the ZIP.</li>
+        </ol>
+      </article>
+
+      <article class="host">
+        <h3>ChatGPT</h3>
+        <ol>
+          <li>Open the <strong>Skills</strong> page (under Plugins in the sidebar).</li>
+          <li>Choose <strong>Create → Upload from your computer</strong>.</li>
+          <li>Upload the ZIP.</li>
+        </ol>
+        <p>No skill uploads on your plan? Paste <code>chatgpt-custom-gpt/INSTRUCTIONS.md</code> into a Custom GPT.</p>
+      </article>
+
+      <article class="host">
+        <h3>GitHub Copilot</h3>
+        <p>With GitHub CLI 2.90 or later:</p>
+        <pre><code>gh skill install \
+  zgbrenner/adhd-and-47-tabs \
+  adhd-and-47-tabs --scope user</code></pre>
+      </article>
+
+      <article class="host">
+        <h3>Codex &amp; Skills CLI</h3>
+        <p>Run <code>$skill-installer</code> inside Codex, or install from the terminal:</p>
+        <pre><code>npx skills add zgbrenner/adhd-and-47-tabs \
+  --skill adhd-and-47-tabs</code></pre>
+      </article>
+    </div>
+
+    <p class="sintro" style="margin-top:var(--s6)">Verify the download against the published checksum before installing:</p>
+    <pre style="margin-top:var(--s3);max-width:52rem"><code>sha256sum -c SHA256SUMS
+# adhd-and-47-tabs.zip: OK</code></pre>
+  </section>
+
+  <section class="wrap band rule-top" id="faq">
+    <p class="slabel">Questions</p>
+    <h2>Before you install</h2>
+
+    <div class="faq">
+      <div>
+        <h3>Do I need an ADHD diagnosis to use it?</h3>
+        <p>No. This is a response-design skill, not a medical tool. It will not diagnose you, explain your behavior back to you, or treat one attention style as universal.</p>
+      </div>
+      <div>
+        <h3>Does it just make answers shorter?</h3>
+        <p>No. The target is lower cognitive load, not fewer words. A short answer that omits what you needed is the failure it is built to prevent.</p>
+      </div>
+      <div>
+        <h3>What happens to detailed requests?</h3>
+        <p>They stay detailed. Ask for a deep dive, an exhaustive list, or a formal memo and you get exactly that, with clearer navigation.</p>
+      </div>
+      <div>
+        <h3>Does it flatten creative or emotional replies?</h3>
+        <p>No. Creative work keeps its shape, and support stays human instead of turning into a task list. Both are written in as explicit exceptions.</p>
+      </div>
+      <div>
+        <h3>Is anything sent anywhere?</h3>
+        <p>Nothing. The package is Markdown and one YAML file: no executable code, no network calls, no credentials, no telemetry, no dependencies.</p>
+      </div>
+      <div>
+        <h3>How do I switch it off?</h3>
+        <p>Say <code>normal mode</code>, <code>stop 47-tabs mode</code>, or <code>stop ADHD mode</code>. The defaults stop until you ask for them back.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap close rule-top">
+    <h2>Install it once. Notice it every time you open a chat tired.</h2>
+    <div class="actions">
+      <a class="btn btn--go" href="https://github.com/zgbrenner/adhd-and-47-tabs/releases/latest/download/adhd-and-47-tabs.zip">Download v3.0.1 <small>MIT</small></a>
+      <a class="btn btn--out" href="https://github.com/zgbrenner/adhd-and-47-tabs#readme">Documentation</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <div class="foot">
+    <p>Original concept and skill by <a href="https://github.com/ayghri/i-have-adhd">Ayoub Ghriss</a>. Cross-platform adaptation by <a href="https://github.com/zgbrenner">Zachary Brenner</a>. MIT licensed.</p>
+    <ul>
+      <li><a href="https://github.com/zgbrenner/adhd-and-47-tabs">Repository</a></li>
+      <li><a href="https://github.com/zgbrenner/adhd-and-47-tabs/releases">Releases</a></li>
+      <li><a href="https://github.com/zgbrenner/adhd-and-47-tabs/blob/main/docs/EVALUATION.md">Evaluation</a></li>
+      <li><a href="https://github.com/zgbrenner/adhd-and-47-tabs/issues">Issues</a></li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zgbrenner.github.io/adhd-and-47-tabs/sitemap.xml
