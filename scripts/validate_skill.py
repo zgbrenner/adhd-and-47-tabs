@@ -186,6 +186,7 @@ def main() -> None:
         ROOT / "index.html",
         ROOT / "robots.txt",
         ROOT / "sitemap.xml",
+        ROOT / ".nojekyll",
     ]
     for path in required_files:
         require_file(path)
